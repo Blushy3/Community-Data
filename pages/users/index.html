@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Data</title>
+  
+  <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../../index.html"><span id="brandName">Community Hub</span></a>
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <ul>
+          <li><a href="../../index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="../achievements/" data-i18n="nav.achievements">Achievements</a></li>
+          <li><a href="../users/" aria-current="page" data-i18n="nav.users">Users</a></li>
+          <li><a href="../other/" data-i18n="nav.other">Other</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" id="langSwitch">
+          <button class="lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-code">EN</span><span class="caret">&#9660;</span>
+          </button>
+          <div class="lang-menu" role="menu">
+            <button type="button" role="menuitem" data-lang-opt="en" aria-pressed="false">English</button>
+            <button type="button" role="menuitem" data-lang-opt="pl" aria-pressed="false">Polski</button>
+            <button type="button" role="menuitem" data-lang-opt="es" aria-pressed="false">Espanol</button>
+          </div>
+        </div>
+        <button class="burger" id="burger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <div class="container">
+      <div class="page-header">
+        <h1 data-i18n="users.title">Users</h1>
+        <p data-i18n="users.subtitle">Browse community profiles.</p>
+      </div>
+      <div class="view">
+      <div class="toolbar">
+        <div class="field"><input type="search" id="searchInput" data-i18n-ph="common.search" placeholder="Search..."></div>
+        
+      </div>
+      <div class="grid grid-4" id="userGrid"></div>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container inner">
+      <span>&copy; <span id="year">2026</span> Community Hub &middot; <span data-i18n="footer.rights">All rights reserved.</span>
+  <div class="toast" id="toast" role="status" aria-live="polite"><h4></h4><p></p></div>
+  <script>window.CH_BASE = "../../";</script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/users.js"></script>
+</body>
+</html>
+
+
+
+

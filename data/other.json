@@ -1,0 +1,35 @@
+[
+  {
+    "id": "minecraft",
+    "title": "Minecraft Server",
+    "description": "Nasz serwer Minecraft dla społeczności.",
+    "detail": "Private Minecraft server for community members. Pure vanilla gameplay, regular events, and a friendly whitelist-only atmosphere. No custom plugins, just classic Minecraft with a great community. Want to join us? Contact the administration to get the server IP!",
+    "image": "./assets/projects/minecraft.png",
+    "url": "http://pancerni.hsrv.pl:10009/",
+    "urlLabel": "Open Server Map",
+    "status": "Active",
+    "tags": [
+      "Game",
+      "Community",
+      "Server"
+    ],
+    "order": 1,
+    "published": true
+  },
+  {
+    "id": "rules",
+    "title": "Discord Rules",
+    "description": "Community Discord server rules and guidelines.",
+    "detail": "1. Netiquette and Discord guidelines apply on the server without exception (with a grain of salt): https://discordapp.com/guidelines. • 2. Administrators have the right to take any action they deem appropriate depending on the situation. If there are doubts about a moderator's decision (only if it is not in accordance with the rules), please ask the moderator to contact an administrator regarding the matter. • 3. Mass-mentioning administrators is strictly prohibited and may result in a warning or mute, and in extreme cases, a ban. • 4. Evading punishments or bans, creating additional accounts, etc. will result in a permanent ban on all accounts. • 5. Advertising any content unrelated to our server is prohibited and will result in a mute or ban. • 6. Offensive or unmentionable nicknames must be changed. Failure to comply may, in extreme cases, result in a ban. • 7. Sharing private information, even regarding public figures, is strictly prohibited. • 8. Frequent trolling of others in voice chat, such as screaming, playing soundboard binds, etc., is prohibited. • 9. All matters not covered by these rules are subject to the moderator's subjective judgment, appropriate to the situation.",
+    "image": "./assets/projects/rules.png",
+    "url": "https://discord.gg/5QGseRgw2w",
+    "urlLabel": "Join Discord",
+    "status": "Active",
+    "tags": [
+      "Community",
+      "Info"
+    ],
+    "order": 2,
+    "published": true
+  }
+]

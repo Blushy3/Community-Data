@@ -1,0 +1,218 @@
+[
+  {
+    "id": "dota",
+    "name": "Dota",
+    "description": "Listen to Basshunter - DotA for 56 hours within one week.",
+    "icon": "./assets/achievements/dota.png",
+    "category": "Music",
+    "rarity": "Rare",
+    "order": 1,
+    "published": true,
+    "users": [
+      "blushyk",
+      "letyv"
+    ]
+  },
+  {
+    "id": "bedeaf",
+    "name": "Be Deaf",
+    "description": "Be deaf as long as possible.",
+    "icon": "./assets/achievements/bedeaf.png",
+    "category": "Fun",
+    "rarity": "Mythic",
+    "order": 2,
+    "published": true,
+    "users": [
+      "tengrubytyp"
+    ]
+  },
+  {
+    "id": "oledowner",
+    "name": "Oled Owner",
+    "description": "Rich and owns a 10k monitor.",
+    "icon": "./assets/achievements/oledowner.png",
+    "category": "Fun",
+    "rarity": "Legendary",
+    "order": 3,
+    "published": true,
+    "users": [
+      "future"
+    ]
+  },
+  {
+    "id": "youthful",
+    "name": "Youthful",
+    "description": "Be so youthful you reach the bummer class.",
+    "icon": "./assets/achievements/youthful.png",
+    "category": "Fun",
+    "rarity": "Rare",
+    "order": 4,
+    "published": true,
+    "users": [
+      "mdzer"
+    ]
+  },
+  {
+    "id": "kizofan",
+    "name": "Kizo Fan",
+    "description": "Be a fan of Kizo and spend money like him running around the hotel in flip-flops without pants.",
+    "icon": "./assets/achievements/kizofan.png",
+    "category": "Fun",
+    "rarity": "Legendary",
+    "order": 5,
+    "published": true,
+    "users": [
+      "tengrubytyp"
+    ]
+  },
+  {
+    "id": "linuxuser",
+    "name": "Linux User",
+    "description": "A person who loves Linux and its problems.",
+    "icon": "./assets/achievements/linuxuser.png",
+    "category": "Fun",
+    "rarity": "Rare",
+    "order": 6,
+    "published": true,
+    "users": [
+      "mdzer"
+    ]
+  },
+  {
+    "id": "podcaster",
+    "name": "Podcaster",
+    "description": "People who turn their conversations into podcasts for others on voice channels.",
+    "icon": "./assets/achievements/podcaster.png",
+    "category": "Community",
+    "rarity": "Rare",
+    "order": 7,
+    "published": true,
+    "users": [
+      "mdzer",
+      "blushyk"
+    ]
+  },
+  {
+    "id": "screensharer",
+    "name": "Screen Sharer",
+    "description": "A person who is a Discord streamer and shares their screen most often.",
+    "icon": "./assets/achievements/screensharer.png",
+    "category": "Community",
+    "rarity": "Uncommon",
+    "order": 8,
+    "published": true,
+    "users": [
+      "tengrubytyp"
+    ]
+  },
+  {
+    "id": "lolplayer",
+    "name": "League Player",
+    "description": "A player who lives or has lived League of Legends for a large part of their life.",
+    "icon": "./assets/achievements/lolplayer.png",
+    "category": "Fun",
+    "rarity": "Rare",
+    "order": 9,
+    "published": true,
+    "users": [
+      "letyv",
+      "mdzer",
+      "future"
+    ]
+  },
+  {
+    "id": "shortsenjoyer",
+    "name": "Shorts Enjoyer",
+    "description": "A person who spends all their time on platforms like TikTok.",
+    "icon": "./assets/achievements/shortsenjoyer.png",
+    "category": "Fun",
+    "rarity": "Common",
+    "order": 10,
+    "published": true,
+    "users": [
+      "licz"
+    ]
+  },
+  {
+    "id": "gifmaster",
+    "name": "Gif Master",
+    "description": "A person who overuses GIFs in every conversation.",
+    "icon": "./assets/achievements/gifmaster.png",
+    "category": "Fun",
+    "rarity": "Uncommon",
+    "order": 11,
+    "published": true,
+    "users": [
+      "tengrubytyp"
+    ]
+  },
+  {
+    "id": "ghost",
+    "name": "Ghost",
+    "description": "A person who is always offline but always does something on the internet.",
+    "icon": "./assets/achievements/ghost.png",
+    "category": "Community",
+    "rarity": "Legendary",
+    "order": 12,
+    "published": true,
+    "users": [
+      "blushyk"
+    ]
+  },
+  {
+    "id": "unemploymentking",
+    "name": "Unemployment King",
+    "description": "You are so unemployed that instead of getting out of bed, you get up from your computer chair.",
+    "icon": "./assets/achievements/unemploymentking.png",
+    "category": "Fun",
+    "rarity": "Legendary",
+    "order": 13,
+    "published": true,
+    "users": [
+      "tengrubytyp",
+      "letyv",
+      "licz"
+    ]
+  },
+  {
+    "id": "noactive",
+    "name": "No Active",
+    "description": "The least active person on the Discord server and other platforms.",
+    "icon": "./assets/achievements/noactive.png",
+    "category": "Community",
+    "rarity": "Rare",
+    "order": 14,
+    "published": true,
+    "users": [
+      "future"
+    ]
+  },
+  {
+    "id": "parkinson",
+    "name": "Parkinson",
+    "description": "A person who shoots straight and still hits themselves with their own hand tremor.",
+    "icon": "./assets/achievements/parkinson.png",
+    "category": "Fun",
+    "rarity": "Mythic",
+    "order": 15,
+    "published": true,
+    "users": [
+      "letyv"
+    ]
+  },
+  {
+    "id": "friendlyfire",
+    "name": "Friendly Fire",
+    "description": "A person who is more useful to the enemy team than to their own team.",
+    "icon": "./assets/achievements/friendlyfire.png",
+    "category": "Fun",
+    "rarity": "Rare",
+    "order": 16,
+    "published": true,
+    "users": [
+      "licz",
+      "tengrubytyp",
+      "letyv"
+    ]
+  }
+]

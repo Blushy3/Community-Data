@@ -1,0 +1,80 @@
+{
+  "nav": {
+    "home": "Strona główna",
+    "achievements": "Osiągnięcia",
+    "users": "Użytkownicy",
+    "other": "Inne",
+    "discord": "Dołącz na Discord",
+    "teamspeak": "Połącz z TeamSpeak"
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Nie udało się załadować treści.",
+    "offline": "Nie udało się załadować danych. Sprawdź połączenie lub serwer.",
+    "search": "Szukaj...",
+    "all": "Wszystkie",
+    "status": "Status",
+    "role": "Rola",
+    "comingSoon": "Już wkrótce!",
+    "comingSoonDesc": "Personalizacja profilu będzie dostępna już wkrótce. Zajrzyj później.",
+    "noResults": "Nie znaleziono wyników."
+  },
+  "home": {
+    "tagline": "Community Data to prywatna społeczność do trzymania danych",
+    "intro": "Kolekcja profili członków, osiągnięć i projektów.",
+    "featuredUser": "Wyróżniony użytkownik",
+    "featuredAchievement": "Wyróżnione osiągnięcie",
+    "featuredProject": "Wyróżniony projekt",
+    "noFeatured": "Nic jeszcze nie wyróżniono.",
+    "snapshotTitle": "Społeczność w liczbach",
+    "snapshotMembers": "członków",
+    "snapshotAchievements": "osiągnięć",
+    "snapshotProjects": "projektów"
+  },
+  "achievements": {
+    "title": "Osiągnięcia",
+    "subtitle": "Kolekcjonerska galeria osiągnięć społeczności.",
+    "empty": "Nie opublikowano jeszcze żadnych osiągnięć.",
+    "category": "Kategoria",
+    "rarity": "Rzadkość",
+    "holders": "Posiadacze",
+    "noHolders": "Brak posiadaczy."
+  },
+  "users": {
+    "title": "Użytkownicy",
+    "subtitle": "Przeglądaj profile społeczności.",
+    "empty": "Nie opublikowano jeszcze żadnych profili społeczności.",
+    "achievements": "osiągnięć",
+    "viewProfile": "Zobacz profil",
+    "worksInProgress": "Personalizacja profilu już wkrótce.",
+    "noAchievements": "Brak osiągnięć."
+  },
+  "other": {
+    "title": "Inne",
+    "subtitle": "Projekty i zasoby społeczności.",
+    "empty": "Nie są dostępne żadne projekty społeczności.",
+    "open": "Otwórz",
+    "tags": "Tagi",
+    "status": "Status",
+    "back": "Wróć do innych",
+    "notFound": "Nie znaleziono projektu."
+  },
+  "profile": {
+    "backToUsers": "Wróć do użytkowników",
+    "notFound": "Ten profil nie istnieje.",
+    "customize": "Dostosuj profil",
+    "bio": "Bio",
+    "about": "O mnie",
+    "links": "Linki",
+    "achievements": "Osiągnięcia",
+    "noAchievements": "Brak osiągnięć.",
+    "editProfile": "Edytuj profil",
+    "noUserSpecified": "Nie określono użytkownika.",
+    "userNotFound": "Nie znaleziono użytkownika.",
+    "footer": "Stworzone z szablonu profilu Community Hub."
+  },
+  "footer": {
+    "rights": "Wszelkie prawa zastrzeżone.",
+    "language": "Język"
+  }
+}

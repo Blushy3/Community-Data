@@ -1,0 +1,80 @@
+﻿{
+  "nav": {
+    "home": "Home",
+    "achievements": "Achievements",
+    "users": "Users",
+    "other": "Other",
+    "discord": "Join Discord",
+    "teamspeak": "Connect to TeamSpeak"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "This content could not be loaded.",
+    "offline": "Could not load data. Check your connection or server.",
+    "search": "Search...",
+    "all": "All",
+    "status": "Status",
+    "role": "Role",
+    "comingSoon": "Coming soon!",
+    "comingSoonDesc": "Profile customization will be available soon. Check back later.",
+    "noResults": "No results found."
+  },
+  "home": {
+    "tagline": "Community Data is a private community built to storage data.",
+    "intro": "A curated collection of member profiles, achievements and projects.",
+    "featuredUser": "Featured user",
+    "featuredAchievement": "Featured achievement",
+    "featuredProject": "Featured project",
+    "noFeatured": "Nothing featured yet.",
+    "snapshotTitle": "Community snapshot",
+    "snapshotMembers": "members",
+    "snapshotAchievements": "achievements",
+    "snapshotProjects": "projects"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "subtitle": "A collectible gallery of community achievements.",
+    "empty": "No achievements have been published yet.",
+    "category": "Category",
+    "rarity": "Rarity",
+    "holders": "Holders",
+    "noHolders": "No holders yet."
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "Browse community profiles.",
+    "empty": "No community profiles have been published yet.",
+    "achievements": "achievements",
+    "viewProfile": "View profile",
+    "worksInProgress": "Profile customization is coming soon.",
+    "noAchievements": "No achievements yet."
+  },
+  "other": {
+    "title": "Other",
+    "subtitle": "Explore community projects and resources.",
+    "empty": "No community projects are available yet.",
+    "open": "Open",
+    "tags": "Tags",
+    "status": "Status",
+    "back": "Back to Other",
+    "notFound": "Project not found."
+  },
+  "profile": {
+    "backToUsers": "Back to Users",
+    "notFound": "This profile does not exist.",
+    "customize": "Customize profile",
+    "bio": "Bio",
+    "about": "About",
+    "links": "Links",
+    "achievements": "Achievements",
+    "noAchievements": "No achievements yet.",
+    "editProfile": "Edit profile",
+    "noUserSpecified": "No user specified.",
+    "userNotFound": "User not found.",
+    "footer": "Made with the Community Hub profile template."
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "language": "Language"}
+}
+
