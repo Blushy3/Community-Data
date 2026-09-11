@@ -214,5 +214,27 @@
       "tengrubytyp",
       "letyv"
     ]
+  },
+  {
+    "id": "videoeditor",
+    "name": "Video Editor",
+    "description": "Your go-to person when a clip needs to go from raw to legendary. (Beginner)",
+    "icon": "./assets/achievements/videoeditor.png",
+    "category": "Fun",
+    "rarity": "Rare",
+    "order": 17,
+    "published": true,
+    "users": []
+  },
+  {
+    "id": "techsupport",
+    "name": "Technical Support",
+    "description": "The person everyone DMs first when something breaks. (Beginner)",
+    "icon": "./assets/achievements/techsupport.png",
+    "category": "Community",
+    "rarity": "Legendary",
+    "order": 18,
+    "published": true,
+    "users": []
   }
 ]
