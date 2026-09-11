@@ -224,17 +224,22 @@
     "rarity": "Rare",
     "order": 17,
     "published": true,
-    "users": []
+    "users": [
+      "blushyk"
+    ]
   },
   {
     "id": "techsupport",
     "name": "Technical Support",
-    "description": "The person everyone DMs first when something breaks. (Beginner)",
+    "description": "The person everyone DMs first when something breaks.",
     "icon": "./assets/achievements/techsupport.png",
     "category": "Community",
     "rarity": "Legendary",
     "order": 18,
     "published": true,
-    "users": []
+    "users": [
+      "blushyk",
+      "mdzer"
+    ]
   }
 ]
