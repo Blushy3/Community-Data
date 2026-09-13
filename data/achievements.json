@@ -220,8 +220,8 @@
     "name": "Edit Maker",
     "description": "A person who spends hours making edits from game clips to flex on others.",
     "icon": "./assets/achievements/editmaker.png",
-    "category": "Trolling",
-    "rarity": "Rare",
+    "category": "Challenge",
+    "rarity": "Epic",
     "order": 17,
     "published": true,
     "users": [
