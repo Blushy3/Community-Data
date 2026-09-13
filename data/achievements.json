@@ -216,16 +216,18 @@
     ]
   },
   {
-    "id": "videoeditor",
-    "name": "Video Editor",
-    "description": "Your go-to person when a clip needs to go from raw to legendary. (Beginner)",
-    "icon": "./assets/achievements/videoeditor.png",
-    "category": "Fun",
+    "id": "editmaker",
+    "name": "Edit Maker",
+    "description": "A person who spends hours making edits from game clips to flex on others.",
+    "icon": "./assets/achievements/editmaker.png",
+    "category": "Trolling",
     "rarity": "Rare",
     "order": 17,
     "published": true,
     "users": [
-      "blushyk"
+      "blushyk",
+      "letyv",
+      "tengrubytyp"
     ]
   },
   {
@@ -238,8 +240,7 @@
     "order": 18,
     "published": true,
     "users": [
-      "blushyk",
-      "mdzer"
+      "blushyk"
     ]
   }
 ]
