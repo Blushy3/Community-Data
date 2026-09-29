@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Data</title>
+  <meta name="description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/minecraft.css">
+</head>
+<body>
+  <a class="back-home" href="../../index.html">← Back</a>
+
+  <div class="wrap">
+    <main>
+      <div class="season-banner reveal" hidden>
+        <div class="season-banner-text">
+          <span class="season-emoji">🍂</span>
+          <div>
+            <span class="season-title">Autumn Season</span>
+            <span class="season-sub">The autumn event is live — new spawn and Halloween vibes.</span>
+          </div>
+        </div>
+        <div class="countdown-wrap">
+          <span class="cd-label">Event ends in</span>
+          <div class="countdown">
+            <div class="cd-unit"><b id="cdD">--</b><span>days</span></div>
+            <div class="cd-unit"><b id="cdH">--</b><span>hrs</span></div>
+            <div class="cd-unit"><b id="cdM">--</b><span>min</span></div>
+            <div class="cd-unit"><b id="cdS">--</b><span>sec</span></div>
+          </div>
+        </div>
+      </div>
+      <section class="hero">
+        <div class="server-card">
+          <div class="server-icon">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grass block">
+              <rect x="8" y="32" width="48" height="24" fill="#79553a"/>
+              <rect x="8" y="32" width="48" height="6" fill="#8a6244"/>
+              <rect x="8" y="8" width="48" height="24" fill="#79b544"/>
+              <rect x="8" y="8" width="48" height="7" fill="#9bd06a"/>
+              <rect x="14" y="38" width="6" height="6" fill="#6a4a30"/>
+              <rect x="30" y="44" width="6" height="6" fill="#6a4a30"/>
+              <rect x="46" y="38" width="6" height="6" fill="#6a4a30"/>
+              <rect x="20" y="14" width="6" height="6" fill="#6fae3e"/>
+              <rect x="38" y="20" width="6" height="6" fill="#6fae3e"/>
+            </svg>
+          </div>
+          <div class="server-body">
+            <div class="server-top">
+              <h1>Minecraft Server</h1>
+              <span class="status" id="srvStatus"><i class="dot"></i><span id="srvStatusText">Connecting…</span></span>
+            </div>
+            <p class="motd" id="srvMotd">Our community Minecraft server — Survival, autumn vibes.</p>
+          </div>
+          <div class="server-side">
+            <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="players" id="srvPlayers"><b>—</b>/—</div>
+            <span class="version" id="srvVersion">1.21.11</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="strip reveal">
+        <div><span>Version</span><b>1.21.11</b></div>
+        <div><span>Mode</span><b>Survival</b></div>
+        <div><span>Latest update</span><b>v1.9</b></div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-head">
+          <h2>Latest news</h2>
+          <p>What's changing on the server — follow future updates.</p>
+        </div>
+        <div class="feed">
+          <button type="button" class="post" aria-haspopup="dialog">
+            <span class="post-meta"><span class="ver">v1.9</span><span class="date">15.10.2026</span></span>
+            <span class="post-title">Stability &amp; Map Fix</span>
+            <span class="post-excerpt">Server stability improvements and a fix for the slow-loading map.</span>
+            <span class="post-hint"></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-head">
+          <h2>Browse the Map</h2>
+          <p>See our world live online.</p>
+        </div>
+        <a class="map-card" href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">
+          <span class="map-pin" aria-hidden="true"></span>
+          <span class="map-label">Open map →</span>
+        </a>
+        <p class="join-note">To join the server — join <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">our Discord</a>.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="copy">© 2026 Community Data · Minecraft Server</div>
+      <div class="footer-links">
+        <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">Discord</a>
+        <a href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">Map</a>
+        <a href="../rules/">Rules</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (e) { e.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var status = document.getElementById('srvStatus');
+      var statusText = document.getElementById('srvStatusText');
+      var players = document.getElementById('srvPlayers');
+      var version = document.getElementById('srvVersion');
+      var motd = document.getElementById('srvMotd');
+      function setOffline(label) {
+        status.className = 'status off';
+        statusText.textContent = label || 'Offline';
+        players.innerHTML = '<b>—</b>/—';
+        version.textContent = '—';
+        if (motd) motd.textContent = 'The server is currently offline.';
+      }
+      function refresh() {
+        fetch('https://api.mcsrvstat.us/3/pancerni.hsrv.pl')
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (d && d.online) {
+              status.className = 'status';
+              statusText.textContent = 'Online';
+              var on = (d.players && d.players.online != null) ? d.players.online : '—';
+              var max = (d.players && d.players.max != null) ? d.players.max : '—';
+              players.innerHTML = '<b>' + on + '</b>/' + max;
+              if (d.version) version.textContent = d.version;
+              if (motd && d.motd && d.motd.clean) motd.textContent = d.motd.clean.join(' ');
+            } else {
+              setOffline();
+            }
+          })
+          .catch(function () { setOffline('No data'); });
+      }
+      refresh();
+      setInterval(refresh, 30000);
+    })();
+  </script>
+
+  <div class="modal" id="newsModal" hidden>
+    <div class="modal-overlay" data-close></div>
+    <div class="modal-box">
+      <div class="modal-head">
+        <span class="modal-meta"><span class="ver">v1.9</span><span class="date">15.10.2026</span></span>
+        <button type="button" class="modal-close" data-close aria-label="Close">X</button>
+      </div>
+      <h3 class="modal-title">Stability &amp; Map Fix</h3>
+      <div class="modal-body">
+        <p>This update focuses on stability and performance across the server and the website.</p>
+        <ul>
+          <li>Improved overall server stability and reduced crashes.</li>
+          <li>Fixed the website map that was loading slowly.</li>
+          <li>Various performance optimizations under the hood.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var post = document.querySelector('.post');
+      var modal = document.getElementById('newsModal');
+      if (!post || !modal) return;
+      post.addEventListener('click', function () { modal.hidden = false; });
+      modal.querySelectorAll('[data-close]').forEach(function (el) {
+        el.addEventListener('click', function () { modal.hidden = true; });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+      });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      // Autumn event end date: October 31, 2026, 23:59:59
+      var eventEnd = new Date('2026-10-31T23:59:59').getTime();
+      var dEl = document.getElementById('cdD');
+      var hEl = document.getElementById('cdH');
+      var mEl = document.getElementById('cdM');
+      var sEl = document.getElementById('cdS');
+      if (!dEl) return;
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      function tick() {
+        var diff = eventEnd - Date.now();
+        if (diff <= 0) {
+          dEl.textContent = '0'; hEl.textContent = '00'; mEl.textContent = '00'; sEl.textContent = '00';
+          return;
+        }
+        dEl.textContent = String(Math.floor(diff / 86400000));
+        hEl.textContent = pad(Math.floor(diff / 3600000) % 24);
+        mEl.textContent = pad(Math.floor(diff / 60000) % 60);
+        sEl.textContent = pad(Math.floor(diff / 1000) % 60);
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
+</html>

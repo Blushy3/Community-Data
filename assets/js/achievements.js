@@ -117,9 +117,9 @@
     var pSite = CH.fetchJSON("data/site.json");
 
     Promise.all([pAch, pUsers, pSite]).then(function (r) {
-      CH.state.site = r[3] || {};
+      CH.state.site = r[2] || {};
       document.getElementById("brandName").textContent = CH.state.site.communityName || "Community Hub";
-      CH.state.users = Array.isArray(r[2]) ? r[2] : [];
+      CH.state.users = Array.isArray(r[1]) ? r[1] : [];
       var list = Array.isArray(r[0]) ? r[0] : [];
       if (!r[0]) {
         var grid = document.getElementById("achGrid");

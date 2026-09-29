@@ -61,7 +61,7 @@
       CH.fetchJSON("data/achievements.json"),
       CH.fetchJSON("data/site.json")
     ]).then(function (r) {
-      CH.state.site = r[3] || {};
+      CH.state.site = r[2] || {};
       document.getElementById("brandName").textContent = CH.state.site.communityName || "Community Hub";
       CH.state.achievements = Array.isArray(r[1]) ? r[1] : [];
       CH.state.users = Array.isArray(r[0]) ? r[0] : [];

@@ -34,5 +34,17 @@
     "name": "Blushyk",
     "role": "Admin",
     "bio": ""
+  },
+  {
+    "id": "aeternus",
+    "name": "Aeternus",
+    "role": "Member",
+    "bio": ""
+  },
+  {
+    "id": "topor",
+    "name": "Topór",
+    "role": "Member",
+    "bio": ""
   }
 ]

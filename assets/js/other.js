@@ -59,7 +59,7 @@
 
     list.forEach(function (p) {
       var card = CH.el("a", "card proj-card");
-      card.href = "detail.html?id=" + p.id;
+      card.href = p.page ? CH.asset(p.page) : "#";
 
       var thumb = new Image();
       thumb.loading = "lazy";

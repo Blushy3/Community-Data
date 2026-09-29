@@ -98,7 +98,7 @@
         CH.t("home.featuredProject"),
         featProj.title,
         featProj.description,
-        featProj.url,
+        featProj.page,
         CH.t("other.open")
       ));
     }
