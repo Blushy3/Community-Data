@@ -23,20 +23,21 @@ a{color:var(--amber);text-decoration:none}
 .back-home:hover{color:var(--text);border-color:var(--amber)}
 
 /* grid layout */
-main{max-width:1120px;margin:0 auto;padding:5rem 1.5rem 2rem;display:grid;grid-template-columns:1.7fr 1fr;grid-template-areas:"status stats" "news join";gap:1.5rem;align-items:start}
+main{max-width:1120px;margin:0 auto;padding:5rem 1.5rem 2rem;display:grid;grid-template-columns:1.7fr 1fr;grid-template-areas:"banner banner" "status stats" "news join";gap:1.5rem;align-items:start}
 .server-card,.section,.strip,.strip div,.post,.season-banner,.map-card,.modal-box{backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%)}
 
 /* season banner (autumn) */
-.season-banner{grid-area:banner;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;padding:1.2rem 1.5rem;border-radius:16px;border:1px solid rgba(232,133,58,.35);background:linear-gradient(120deg,rgba(232,133,58,.26),rgba(196,90,40,.07)),var(--panel-2)}
+.season-banner{grid-area:banner;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.2rem 1.5rem;border-radius:16px;border:1px solid rgba(232,133,58,.35);background:linear-gradient(120deg,rgba(232,133,58,.26),rgba(196,90,40,.07)),var(--panel-2)}
 .season-banner::before,.season-banner::after{position:absolute;font-size:1.5rem;opacity:.35;pointer-events:none;animation:float 6s ease-in-out infinite}
 .season-banner::before{content:"🍁";top:-6px;left:40%}
 .season-banner::after{content:"🍂";bottom:-8px;right:20%;animation-delay:3s}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-7px) rotate(8deg)}}
-.season-banner-text{display:flex;align-items:center;gap:1rem}
+.season-banner-text{display:flex;align-items:center;gap:1rem;flex:1;min-width:0}
+.season-banner-text > div{min-width:0;flex:1}
 .season-emoji{font-size:2rem}
 .season-title{display:block;font-family:var(--display);font-size:1.15rem;font-weight:600;color:var(--autumn-2)}
 .season-sub{display:block;color:var(--dim);font-size:.85rem}
-.countdown-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:.45rem}
+.countdown-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:.45rem;flex-shrink:0}
 .cd-label{font-family:var(--mono);font-size:.72rem;color:var(--autumn);text-transform:uppercase;letter-spacing:.1em}
 .countdown{display:flex;gap:.7rem}
 .cd-unit{min-width:56px;text-align:center;background:rgba(0,0,0,.25);border:1px solid rgba(232,133,58,.3);border-radius:10px;padding:.6rem .5rem}
@@ -130,6 +131,6 @@ main{max-width:1120px;margin:0 auto;padding:5rem 1.5rem 2rem;display:grid;grid-t
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
-@media(max-width:860px){main{grid-template-columns:1fr;grid-template-areas:"status" "stats" "news" "join"}}
+@media(max-width:860px){main{grid-template-columns:1fr;grid-template-areas:"status" "stats" "news" "join"}.season-banner{flex-direction:column;align-items:flex-start}.countdown-wrap{align-items:flex-start}}
 @media(max-width:560px){.server-card{flex-direction:column;align-items:flex-start}.server-side{flex-direction:row;align-items:center;gap:1rem}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../data/Favicon/favicon-32x32.png">
+  <link rel="icon" href="../../data/Favicon/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Community Data</title>
   <meta name="description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
@@ -15,12 +17,12 @@
 
   <div class="wrap">
     <main>
-      <div class="season-banner reveal" hidden>
+      <div class="season-banner reveal">
         <div class="season-banner-text">
           <span class="season-emoji">🍂</span>
           <div>
             <span class="season-title">Autumn Season</span>
-            <span class="season-sub">The autumn event is live — new spawn and Halloween vibes.</span>
+            <span class="season-sub">The autumn event is live — autumn vibes, pumpkins, time by the campfire and autumn walks are all here now, along with Halloween on the 30th and 31st.</span>
           </div>
         </div>
         <div class="countdown-wrap">
@@ -66,7 +68,7 @@
       <section class="strip reveal">
         <div><span>Version</span><b>1.21.11</b></div>
         <div><span>Mode</span><b>Survival</b></div>
-        <div><span>Latest update</span><b>v1.9</b></div>
+        <div><span>Latest update</span><b>v2.0</b></div>
       </section>
 
       <section class="section reveal">
@@ -75,7 +77,18 @@
           <p>What's changing on the server — follow future updates.</p>
         </div>
         <div class="feed">
-          <button type="button" class="post" aria-haspopup="dialog">
+          <button type="button" class="post" aria-haspopup="dialog"
+            data-ver="v2.0" data-date="29.09.2026" data-title="Autumn Update"
+            data-points="Trees turn into all kinds of colours: orange, blue, green, yellow and brown.|Grass has a light-brown muddy colour.|The sky has a grey colour.|Water is brown and looks muddy.|Big patches of mushrooms appear.|It will rain and storm very often.|Small (falling leaf) particles will appear under trees.|Bats spawn above ground at night.|Mooshrooms, frogs and foxes appear everywhere.|Extra spiders can be found at night and sometimes even cave spiders.|Mobs have a 20% chance to spawn with a pumpkin on their head.|Day and night length are mostly equal, see day and night length.|Pumpkins on mobs">
+            <span class="post-meta"><span class="ver">v2.0</span><span class="date">29.09.2026</span></span>
+            <span class="post-title">Autumn Update</span>
+            <span class="post-excerpt">The autumn event is live — autumn vibes, pumpkins, time by the campfire and autumn walks are all here now, along with Halloween on the 30th and 31st.</span>
+            <span class="post-hint"></span>
+          </button>
+          <button type="button" class="post" aria-haspopup="dialog"
+            data-ver="v1.9" data-date="15.10.2026" data-title="Stability &amp; Map Fix"
+            data-desc="This update focuses on stability and performance across the server and the website."
+            data-points="Improved overall server stability and reduced crashes.|Fixed the website map that was loading slowly.|Various performance optimizations under the hood.">
             <span class="post-meta"><span class="ver">v1.9</span><span class="date">15.10.2026</span></span>
             <span class="post-title">Stability &amp; Map Fix</span>
             <span class="post-excerpt">Server stability improvements and a fix for the slow-loading map.</span>
@@ -164,27 +177,37 @@
     <div class="modal-overlay" data-close></div>
     <div class="modal-box">
       <div class="modal-head">
-        <span class="modal-meta"><span class="ver">v1.9</span><span class="date">15.10.2026</span></span>
+        <span class="modal-meta" id="modalMeta"></span>
         <button type="button" class="modal-close" data-close aria-label="Close">X</button>
       </div>
-      <h3 class="modal-title">Stability &amp; Map Fix</h3>
-      <div class="modal-body">
-        <p>This update focuses on stability and performance across the server and the website.</p>
-        <ul>
-          <li>Improved overall server stability and reduced crashes.</li>
-          <li>Fixed the website map that was loading slowly.</li>
-          <li>Various performance optimizations under the hood.</li>
-        </ul>
-      </div>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
   <script>
     (function () {
-      var post = document.querySelector('.post');
       var modal = document.getElementById('newsModal');
-      if (!post || !modal) return;
-      post.addEventListener('click', function () { modal.hidden = false; });
+      var meta = document.getElementById('modalMeta');
+      var title = document.getElementById('modalTitle');
+      var body = document.getElementById('modalBody');
+      if (!modal) return;
+      document.querySelectorAll('.post').forEach(function (post) {
+        post.addEventListener('click', function () {
+          meta.innerHTML = '<span class="ver">' + post.dataset.ver + '</span><span class="date">' + post.dataset.date + '</span>';
+          title.textContent = post.dataset.title;
+          var html = '';
+          if (post.dataset.desc) html += '<p>' + post.dataset.desc + '</p>';
+          var points = (post.dataset.points || '').split('|').filter(Boolean);
+          if (points.length) {
+            html += '<ul>';
+            points.forEach(function (p) { html += '<li>' + p + '</li>'; });
+            html += '</ul>';
+          }
+          body.innerHTML = html;
+          modal.hidden = false;
+        });
+      });
       modal.querySelectorAll('[data-close]').forEach(function (el) {
         el.addEventListener('click', function () { modal.hidden = true; });
       });
