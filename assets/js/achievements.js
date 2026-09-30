@@ -12,6 +12,11 @@
     CH.state.achievements = list;
     renderSelects();
     render();
+    var statsEl = document.getElementById("achStats");
+    if (statsEl) {
+      var rarities = unique(list.map(function (a) { return a && a.rarity; }).filter(Boolean));
+      statsEl.textContent = list.length + " " + CH.t("achievements.title") + " · " + rarities.length + " " + CH.t("achievements.rarity");
+    }
   }
 
   function renderSelects() {
@@ -68,6 +73,26 @@
     });
   }
 
+  function holderChips(a) {
+    var holders = (a.users || []).map(function (id) {
+      var found = null;
+      (CH.state.users || []).forEach(function (u) { if (u && u.id === id) found = u; });
+      return found;
+    }).filter(Boolean);
+    if (!holders.length) return null;
+    var row = CH.el("div", "ach-holders");
+    holders.slice(0, 5).forEach(function (u) {
+      var chip = CH.el("span", "chip", CH.initials(u.name));
+      chip.style.background = CH.avatarGradient(u.name);
+      chip.title = u.name || "";
+      row.appendChild(chip);
+    });
+    if (holders.length > 5) {
+      row.appendChild(CH.el("span", "chip chip-more", "+" + (holders.length - 5)));
+    }
+    return row;
+  }
+
   function render() {
     var grid = document.getElementById("achGrid");
     if (!grid) return;
@@ -81,6 +106,9 @@
 
     list.forEach(function (a) {
       var card = CH.el("div", "card ach-card");
+      card.style.setProperty("--glow", CH.rarityColor(a.rarity));
+
+      var frame = CH.el("div", "ach-frame");
       var icon = new Image();
       icon.src = CH.asset(a.icon) || "";
       icon.alt = a.name || "Achievement";
@@ -90,24 +118,28 @@
         var ph = CH.el("span", "badge", a.name ? a.name.charAt(0).toUpperCase() : "?");
         icon.replaceWith(ph);
       });
-      card.appendChild(icon);
+      frame.appendChild(icon);
+      card.appendChild(frame);
 
       card.appendChild(CH.el("h3", null, a.name));
       card.appendChild(CH.el("p", null, a.description));
 
       var tags = CH.el("div", "tags");
       if (a.category) {
-        var cb = CH.el("span", "badge", a.category);
-        tags.appendChild(cb);
+        tags.appendChild(CH.el("span", "badge", a.category));
       }
       if (a.rarity) {
-        var rb = CH.el("span", "badge badge-accent", a.rarity);
-        tags.appendChild(rb);
+        tags.appendChild(CH.el("span", "badge badge-rarity", a.rarity));
       }
       card.appendChild(tags);
 
+      var holders = holderChips(a);
+      if (holders) card.appendChild(holders);
+
       grid.appendChild(card);
     });
+
+    CH.stagger(grid.children);
   }
 
   function load() {

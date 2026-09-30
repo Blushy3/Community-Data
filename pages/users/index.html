@@ -40,8 +40,10 @@
   <main id="main">
     <div class="container">
       <div class="page-header">
+        <p class="kicker" data-i18n="kick.users">The roster</p>
         <h1 data-i18n="users.title">Users</h1>
-        <p data-i18n="users.subtitle">Browse community profiles.</p>
+        <p class="page-sub" data-i18n="users.subtitle">Browse community profiles.</p>
+        <p class="page-stats" id="userStats"></p>
       </div>
       <div class="view">
       <div class="toolbar">
@@ -53,8 +55,12 @@
     </div>
   </main>
   <footer class="site-footer">
-    <div class="container inner">
-      <span>&copy; <span id="year">2026</span> Community Hub &middot; <span data-i18n="footer.rights">All rights reserved.</span>
+    <div class="container">
+      <div class="inner">
+        <span>&copy; <span id="year">2026</span> Community Hub &middot; <span data-i18n="footer.rights">All rights reserved.</span></span>
+      </div>
+    </div>
+  </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"><h4></h4><p></p></div>
   <script>window.CH_BASE = "../../";</script>
   <script src="../../assets/js/main.js"></script>

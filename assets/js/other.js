@@ -61,38 +61,43 @@
       var card = CH.el("a", "card proj-card");
       card.href = p.page ? CH.asset(p.page) : "#";
 
+      var thumbWrap = CH.el("div", "thumb-wrap");
       var thumb = new Image();
       thumb.loading = "lazy";
       thumb.className = "thumb";
       thumb.src = CH.asset(p.image) || "";
       thumb.alt = p.title || "Project";
       thumb.addEventListener("error", function () {
-        var ph = CH.el("div", "thumb", "");
-        ph.style.display = "flex";
-        ph.style.alignItems = "center";
-        ph.style.justifyContent = "center";
-        ph.style.fontSize = "2rem";
+        var ph = CH.el("div", "thumb thumb-ph");
         ph.textContent = p.title ? p.title.charAt(0).toUpperCase() : "?";
         thumb.replaceWith(ph);
       });
-      card.appendChild(thumb);
+      thumbWrap.appendChild(thumb);
+      card.appendChild(thumbWrap);
 
-      card.appendChild(CH.el("h3", null, p.title));
-      card.appendChild(CH.el("p", null, p.description));
+      var body = CH.el("div", "proj-body");
+      body.appendChild(CH.el("h3", null, p.title));
+      body.appendChild(CH.el("p", null, p.description));
 
       var meta = CH.el("div", "meta");
-      var badge = CH.el("span", "badge badge-accent", p.status || "");
-      meta.appendChild(badge);
+      if (p.status) {
+        var badge = CH.el("span", "badge badge-status");
+        badge.appendChild(CH.el("i", "status-dot"));
+        badge.appendChild(document.createTextNode(p.status));
+        meta.appendChild(badge);
+      }
 
       var tagBox = CH.el("div", "tags");
       (p.tags || []).forEach(function (t) {
         tagBox.appendChild(CH.el("span", "badge", t));
       });
       meta.appendChild(tagBox);
-      card.appendChild(meta);
+      body.appendChild(meta);
+      card.appendChild(body);
 
       grid.appendChild(card);
     });
+    CH.stagger(grid.children);
   }
 
   function load() {
@@ -110,6 +115,8 @@
         return;
       }
       CH.state.other = r[0];
+      var statsEl = document.getElementById("projStats");
+      if (statsEl) statsEl.textContent = CH.state.other.filter(function (p) { return p && p.published !== false; }).length + " " + CH.t("home.snapshotProjects");
       fillTags();
       render();
     });

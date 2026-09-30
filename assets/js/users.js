@@ -31,16 +31,31 @@
     list.forEach(function (u) {
       var card = CH.el("div", "card user-card");
       card.setAttribute("data-user-id", u.id);
+      card.tabIndex = 0;
+
+      var avatar = CH.el("div", "avatar", CH.initials(u.name));
+      avatar.style.background = CH.avatarGradient(u.name);
+      avatar.setAttribute("aria-hidden", "true");
+      card.appendChild(avatar);
+
       card.appendChild(CH.el("h3", null, u.name));
-      if (u.role) card.appendChild(CH.el("div", "role", u.role));
+      if (u.role) card.appendChild(CH.el("span", "role" + (/admin/i.test(u.role) ? " role-admin" : ""), u.role));
       if (u.bio) card.appendChild(CH.el("p", "bio", u.bio));
+
       var m = CH.el("div", "meta");
       m.appendChild(CH.el("span", null, userAchievements(u.id).length + " " + CH.t("users.achievements")));
       card.appendChild(m);
-      card.addEventListener("click", function () { window.location.href = "../profile/?id=" + u.id; });
-      card.style.cursor = "pointer";
+
+      card.appendChild(CH.el("span", "card-arrow", "\u2192"));
+
+      function open() { window.location.href = "../profile/?id=" + u.id; }
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+      });
       grid.appendChild(card);
     });
+    CH.stagger(grid.children);
   }
   function load() {
     Promise.all([
@@ -54,6 +69,8 @@
       CH.state.users = Array.isArray(r[0]) ? r[0] : [];
       document.getElementById("year").textContent = new Date().getFullYear();
       if (!Array.isArray(r[0])) { var grid = document.getElementById("userGrid"); if (grid) grid.appendChild(CH.emptyState(CH.t("common.error"))); return; }
+      var statsEl = document.getElementById("userStats");
+      if (statsEl) statsEl.textContent = CH.state.users.length + " " + CH.t("home.snapshotMembers");
       render();
     });
   }

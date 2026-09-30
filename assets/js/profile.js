@@ -1,7 +1,10 @@
-﻿/* Profile page - loads user data from URL param */
+/* ============================================================
+   Profile page — hero card + achievements, data from URL param.
+   ============================================================ */
 (function () {
   "use strict";
   var CH = window.CH;
+
   function getParam(name) {
     var q = window.location.search.substring(1).split("&");
     for (var i = 0; i < q.length; i++) {
@@ -10,6 +13,7 @@
     }
     return null;
   }
+
   function userAchievements(uid) {
     var out = [];
     (CH.state.achievements || []).forEach(function (a) {
@@ -23,38 +27,48 @@
     var uid = getParam("id");
     var container = document.getElementById("profileContent");
     if (!container) return;
-    if (!uid) { container.innerHTML = "<p style=\"text-align:center;padding:4rem;color:var(--ink-dim)\">" + CH.t("profile.noUserSpecified") + "</p>"; return; }
+    if (!uid) { container.innerHTML = "<p class=\"profile-msg\">" + CH.t("profile.noUserSpecified") + "</p>"; return; }
     var user = null;
     (CH.state.users || []).forEach(function (u) { if (u.id === uid) user = u; });
-    if (!user) { container.innerHTML = "<p style=\"text-align:center;padding:4rem;color:var(--ink-dim)\">" + CH.t("profile.userNotFound") + "</p>"; return; }
-    var html = "<div class=\"profile-page\">";
-    html += "<a href=\"../users/\" class=\"btn btn-ghost\" style=\"margin-bottom:1.5rem;display:inline-flex\">&larr; " + CH.t("profile.backToUsers") + "</a>";
-    html += "<h1 class=\"profile-name\">" + CH.escapeHtml(user.name) + "</h1>";
-    if (user.role) html += "<div class=\"profile-role\">" + CH.escapeHtml(user.role) + "</div>";
-    html += "<h3 class=\"profile-ach-title\">" + CH.t("profile.achievements") + "</h3>";
+    if (!user) { container.innerHTML = "<p class=\"profile-msg\">" + CH.t("profile.userNotFound") + "</p>"; return; }
+
     var ach = userAchievements(uid);
+
+    var html = "";
+    html += "<a href=\"../users/\" class=\"btn btn-ghost back-link\">&larr; " + CH.t("profile.backToUsers") + "</a>";
+    html += "<div class=\"profile-head-simple\">";
+    html += "<h1 class=\"profile-name\">" + CH.escapeHtml(user.name) + "</h1>";
+    if (user.role) html += "<span class=\"role\">" + CH.escapeHtml(user.role) + "</span>";
+    html += "</div>";
+
+    html += "<section class=\"profile-ach-section\">";
+    html += "<h2 class=\"profile-ach-title\">" + CH.t("profile.achievements") + "<span class=\"ach-count\">" + ach.length + "</span></h2>";
     if (!ach.length) {
       html += "<p class=\"profile-ach-empty\">" + CH.t("profile.noAchievements") + "</p>";
     } else {
       html += "<div class=\"profile-ach-grid\">";
       ach.forEach(function (a) {
-        html += "<div class=\"profile-ach-item\">";
-        html += "<img class=\"profile-ach-icon\" src=\"" + CH.escapeHtml(CH.asset(a.icon)) + "\" alt=\"" + CH.escapeHtml(a.name) + "\" loading=\"lazy\" onerror=\"this.style.display='none'\">";
-        html += "<div><div class=\"profile-ach-name\">" + CH.escapeHtml(a.name) + "</div>";
-        html += "<div class=\"profile-ach-desc\">" + CH.escapeHtml(a.description) + "</div></div>";
-        html += "</div>";
+        html += "<div class=\"profile-ach-item\" style=\"--glow:" + CH.rarityColor(a.rarity) + "\">";
+        html += "<div class=\"ach-frame\"><img class=\"icon\" src=\"" + CH.escapeHtml(CH.asset(a.icon)) + "\" alt=\"" + CH.escapeHtml(a.name) + "\" loading=\"lazy\" onerror=\"this.style.display='none'\"></div>";
+        html += "<div class=\"ach-txt\"><div class=\"profile-ach-name\">" + CH.escapeHtml(a.name) + "</div>";
+        html += "<div class=\"profile-ach-desc\">" + CH.escapeHtml(a.description) + "</div>";
+        if (a.rarity) html += "<span class=\"badge badge-rarity\">" + CH.escapeHtml(a.rarity) + "</span>";
+        html += "</div></div>";
       });
       html += "</div>";
     }
-    html += "</div>";
+    html += "</section>";
+
     container.innerHTML = html;
+    CH.stagger(container.querySelectorAll(".profile-ach-item"), 150, 60);
+
     var edit = document.createElement("button");
-    edit.className = "btn btn-ghost";
+    edit.className = "btn btn-ghost profile-edit";
     edit.textContent = CH.t("profile.editProfile");
-    edit.style.marginTop = "1.5rem";
     edit.addEventListener("click", function () { CH.showToast("common.comingSoon", "common.comingSoonDesc"); });
     container.appendChild(edit);
   }
+
   function load() {
     Promise.all([
       CH.fetchJSON("data/users.json"),
@@ -69,15 +83,12 @@
       render();
     });
   }
+
   document.addEventListener("DOMContentLoaded", function () {
     if (window.CH && CH.fetchJSON) {
       CH.onReady(load);
       document.addEventListener("ch:langchange", function () { if (CH.state.users.length) render(); });
     }
   });
+
 })();
-
-
-
-
-

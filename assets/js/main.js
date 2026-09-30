@@ -105,7 +105,7 @@
   function loadI18n(lang) {
     return CH.fetchText("data/i18n/" + lang + ".json").then(function (text) {
       try {
-        CH.state.t = JSON.parse(text);
+        CH.state.t = JSON.parse(String(text).replace(/^\uFEFF/, ""));
       } catch (e) {
         CH.state.t = {};
       }
@@ -284,13 +284,72 @@
   };
 
   
+  /* ---------- design helpers (v2 redesign) ---------- */
+  CH.RARITY = {
+    common: "#98a2b3",
+    uncommon: "#3fd97f",
+    rare: "#4da3ff",
+    epic: "#b56cff",
+    legendary: "#ffb02e",
+    mythic: "#ff4d6d"
+  };
+  CH.rarityColor = function (r) {
+    if (!r) return CH.RARITY.common;
+    var k = String(r).toLowerCase().replace(/[^a-z]/g, "");
+    return CH.RARITY[k] || CH.RARITY.common;
+  };
+  CH.initials = function (name) {
+    var parts = String(name || "?").trim().split(/\s+/);
+    var a = parts[0] ? parts[0].charAt(0) : "";
+    var b = parts.length > 1 ? parts[parts.length - 1].charAt(0) : "";
+    return (a + b).toUpperCase() || "?";
+  };
+  CH.nameHue = function (str) {
+    var h = 0;
+    str = String(str || "");
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return h;
+  };
+  CH.avatarGradient = function (name) {
+    var h = CH.nameHue(name);
+    return "linear-gradient(135deg, hsl(" + h + ",68%,56%), hsl(" + ((h + 70) % 360) + ",70%,42%))";
+  };
+  CH.stagger = function (list, base, step) {
+    if (!list) return;
+    var arr = ("length" in list) ? list : list.children;
+    base = base || 40;
+    step = step || 55;
+    Array.prototype.forEach.call(arr, function (el, i) {
+      el.style.animationDelay = (base + i * step) + "ms";
+      el.classList.add("pop-in");
+    });
+  };
+  CH.countUp = function (el, target, duration) {
+    if (!el) return;
+    duration = duration || 1100;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !window.requestAnimationFrame) {
+      el.textContent = String(target);
+      return;
+    }
+    var start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(eased * target));
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  };
+
   /* ---------- boot ---------- */
   CH.init = function () {
 
     // cache English fallback once, then apply saved/preferred language
     if (!window.__EN_FALLBACK) {
       CH.fetchText("data/i18n/en.json").then(function (text) {
-        try { window.__EN_FALLBACK = JSON.parse(text); } catch (e) { window.__EN_FALLBACK = {}; }
+        try { window.__EN_FALLBACK = JSON.parse(String(text).replace(/^\uFEFF/, "")); } catch (e) { window.__EN_FALLBACK = {}; }
         CH.state.lang = getLang();
         loadI18n(CH.state.lang).then(function () {
           applyTranslations();

@@ -73,6 +73,14 @@
     "userNotFound": "User not found.",
     "footer": "Made with the Community Hub profile template."
   },
+  "kick": {
+    "home": "Members · Achievements · Projects",
+    "explore": "Explore",
+    "featured": "Featured",
+    "achievements": "Trophy room",
+    "users": "The roster",
+    "other": "Projects & more"
+  },
   "footer": {
     "rights": "All rights reserved.",
     "language": "Language"}

@@ -73,6 +73,14 @@
     "userNotFound": "Nie znaleziono użytkownika.",
     "footer": "Stworzone z szablonu profilu Community Hub."
   },
+  "kick": {
+    "home": "Członkowie · Osiągnięcia · Projekty",
+    "explore": "Odkryj",
+    "featured": "Wyróżnione",
+    "achievements": "Sala trofeów",
+    "users": "Ekipa",
+    "other": "Projekty i więcej"
+  },
   "footer": {
     "rights": "Wszelkie prawa zastrzeżone.",
     "language": "Język"
