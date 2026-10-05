@@ -1,7 +1,6 @@
-﻿/* ============================================================
+/* ============================================================
    Achievements page rendering + search + category/rarity filters.
-   Supports assigning holders via achievements[].users and/or
-   data/user-achievements.json.
+   Supports assigning holders via achievements[].users.
    ============================================================ */
 (function () {
   "use strict";
@@ -11,6 +10,7 @@
   function store(list) {
     CH.state.achievements = list;
     renderSelects();
+    fillSort();
     render();
     var statsEl = document.getElementById("achStats");
     if (statsEl) {
@@ -28,6 +28,24 @@
     });
     fillSelect("categoryFilter", unique(cats), "achievements.category");
     fillSelect("rarityFilter", unique(rar), "achievements.rarity");
+  }
+
+  function fillSort() {
+    var sel = document.getElementById("sortFilter");
+    if (!sel) return;
+    sel.innerHTML = "";
+    var defs = [
+      ["", "achievements.sortDefault"],
+      ["rarity", "achievements.sortRarity"],
+      ["holders", "achievements.sortHolders"],
+      ["az", "achievements.sortAz"]
+    ];
+    defs.forEach(function (d) {
+      var o = document.createElement("option");
+      o.value = d[0];
+      o.textContent = CH.t("common.sort") + " · " + CH.t(d[1]);
+      sel.appendChild(o);
+    });
   }
 
   function unique(arr) {
@@ -55,12 +73,19 @@
     });
   }
 
+  var RARITY_RANK = { common: 1, uncommon: 2, rare: 3, epic: 4, legendary: 5, mythic: 6 };
+  function rarityRank(a) {
+    return RARITY_RANK[String((a && a.rarity) || "").toLowerCase().replace(/[^a-z]/g, "")] || 0;
+  }
+
   function filtered() {
     var q = (document.getElementById("searchInput").value || "").toLowerCase().trim();
     var cat = document.getElementById("categoryFilter").value;
     var rar = document.getElementById("rarityFilter").value;
+    var sortSel = document.getElementById("sortFilter");
+    var sort = sortSel ? sortSel.value : "";
 
-    return CH.state.achievements.filter(function (a) {
+    var list = CH.state.achievements.filter(function (a) {
       if (!a) return false;
       if (a.published === false) return false;
       if (cat && a.category !== cat) return false;
@@ -71,6 +96,15 @@
       }
       return true;
     });
+
+    if (sort === "rarity") {
+      list.sort(function (a, b) { return rarityRank(b) - rarityRank(a) || (a.order || 0) - (b.order || 0); });
+    } else if (sort === "holders") {
+      list.sort(function (a, b) { return ((b.users || []).length) - ((a.users || []).length) || (a.order || 0) - (b.order || 0); });
+    } else if (sort === "az") {
+      list.sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || "")); });
+    }
+    return list;
   }
 
   function holderChips(a) {
@@ -82,13 +116,17 @@
     if (!holders.length) return null;
     var row = CH.el("div", "ach-holders");
     holders.slice(0, 5).forEach(function (u) {
-      var chip = CH.el("span", "chip", CH.initials(u.name));
+      var chip = CH.el("a", "chip", CH.initials(u.name));
+      chip.href = "../profile/?id=" + encodeURIComponent(u.id);
       chip.style.background = CH.avatarGradient(u.name);
       chip.title = u.name || "";
+      chip.setAttribute("aria-label", (u.name || "") + " — " + CH.t("users.viewProfile"));
       row.appendChild(chip);
     });
     if (holders.length > 5) {
-      row.appendChild(CH.el("span", "chip chip-more", "+" + (holders.length - 5)));
+      var more = CH.el("span", "chip chip-more", "+" + (holders.length - 5));
+      more.title = holders.slice(5).map(function (u) { return u.name || ""; }).join(", ");
+      row.appendChild(more);
     }
     return row;
   }
@@ -165,12 +203,14 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     if (window.CH && CH.fetchJSON) {
-      document.getElementById("searchInput").addEventListener("input", render);
+      document.getElementById("searchInput").addEventListener("input", CH.debounce(render, 160));
       document.getElementById("categoryFilter").addEventListener("change", render);
       document.getElementById("rarityFilter").addEventListener("change", render);
+      var sortSel = document.getElementById("sortFilter");
+      if (sortSel) sortSel.addEventListener("change", render);
       // re-render option labels (translated) and cards on language change
       document.addEventListener("ch:langchange", function () {
-        if (CH.state.achievements.length) { renderSelects(); render(); }
+        if (CH.state.achievements.length) { renderSelects(); fillSort(); render(); }
       });
       CH.onReady(load);
     }

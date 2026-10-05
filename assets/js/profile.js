@@ -27,24 +27,50 @@
     var uid = getParam("id");
     var container = document.getElementById("profileContent");
     if (!container) return;
-    if (!uid) { container.innerHTML = "<p class=\"profile-msg\">" + CH.t("profile.noUserSpecified") + "</p>"; return; }
+    if (!uid) { container.innerHTML = "<p class=\"profile-msg\">" + CH.escapeHtml(CH.t("profile.noUserSpecified")) + "</p>"; return; }
     var user = null;
     (CH.state.users || []).forEach(function (u) { if (u.id === uid) user = u; });
-    if (!user) { container.innerHTML = "<p class=\"profile-msg\">" + CH.t("profile.userNotFound") + "</p>"; return; }
+    if (!user) { container.innerHTML = "<p class=\"profile-msg\">" + CH.escapeHtml(CH.t("profile.userNotFound")) + "</p>"; return; }
 
     var ach = userAchievements(uid);
+    var total = (CH.state.achievements || []).filter(function (a) { return a && a.published !== false; }).length;
+    var pct = total ? Math.min(100, Math.round(ach.length / total * 100)) : 0;
 
     var html = "";
-    html += "<a href=\"../users/\" class=\"btn btn-ghost back-link\">&larr; " + CH.t("profile.backToUsers") + "</a>";
+    html += "<a href=\"../users/\" class=\"btn btn-ghost back-link\">&larr; " + CH.escapeHtml(CH.t("profile.backToUsers")) + "</a>";
     html += "<div class=\"profile-head-simple\">";
     html += "<h1 class=\"profile-name\">" + CH.escapeHtml(user.name) + "</h1>";
     if (user.role) html += "<span class=\"role\">" + CH.escapeHtml(user.role) + "</span>";
     html += "</div>";
+    if (user.bio) html += "<p class=\"profile-bio\">" + CH.escapeHtml(user.bio) + "</p>";
+
+    // progress: X of all published achievements
+    html += "<div class=\"profile-progress\" role=\"group\" aria-label=\"" + CH.escapeHtml(CH.t("profile.achievements")) + "\">";
+    html += "<div class=\"pp-track\"><i style=\"--w:" + pct + "%\"></i></div>";
+    html += "<span class=\"pp-label\"><b>" + ach.length + "</b> / " + total + "</span>";
+    html += "</div>";
+
+    // rarity breakdown of unlocked achievements
+    var byRarity = {};
+    ach.forEach(function (a) {
+      var k = a.rarity ? String(a.rarity).toLowerCase().replace(/[^a-z]/g, "") : "other";
+      if (!byRarity[k]) byRarity[k] = { label: a.rarity || "?", count: 0, color: CH.rarityColor(a.rarity) };
+      byRarity[k].count++;
+    });
+    var rKeys = Object.keys(byRarity);
+    if (rKeys.length) {
+      html += "<div class=\"profile-rarity-row\">";
+      rKeys.forEach(function (k) {
+        var item = byRarity[k];
+        html += "<span class=\"badge badge-rarity\" style=\"--glow:" + item.color + "\">" + CH.escapeHtml(item.label) + " × " + item.count + "</span>";
+      });
+      html += "</div>";
+    }
 
     html += "<section class=\"profile-ach-section\">";
-    html += "<h2 class=\"profile-ach-title\">" + CH.t("profile.achievements") + "<span class=\"ach-count\">" + ach.length + "</span></h2>";
+    html += "<h2 class=\"profile-ach-title\">" + CH.escapeHtml(CH.t("profile.achievements")) + "<span class=\"ach-count\">" + ach.length + "</span></h2>";
     if (!ach.length) {
-      html += "<p class=\"profile-ach-empty\">" + CH.t("profile.noAchievements") + "</p>";
+      html += "<p class=\"profile-ach-empty\">" + CH.escapeHtml(CH.t("profile.noAchievements")) + "</p>";
     } else {
       html += "<div class=\"profile-ach-grid\">";
       ach.forEach(function (a) {
@@ -61,12 +87,6 @@
 
     container.innerHTML = html;
     CH.stagger(container.querySelectorAll(".profile-ach-item"), 150, 60);
-
-    var edit = document.createElement("button");
-    edit.className = "btn btn-ghost profile-edit";
-    edit.textContent = CH.t("profile.editProfile");
-    edit.addEventListener("click", function () { CH.showToast("common.comingSoon", "common.comingSoonDesc"); });
-    container.appendChild(edit);
   }
 
   function load() {
@@ -77,9 +97,14 @@
     ]).then(function (r) {
       CH.state.site = r[2] || {};
       document.getElementById("brandName").textContent = CH.state.site.communityName || "Community Hub";
-      CH.state.achievements = Array.isArray(r[1]) ? r[1] : [];
-      CH.state.users = Array.isArray(r[0]) ? r[0] : [];
       document.getElementById("year").textContent = new Date().getFullYear();
+      if (!Array.isArray(r[0]) || !Array.isArray(r[1])) {
+        var container = document.getElementById("profileContent");
+        if (container) container.appendChild(CH.emptyState(CH.t("common.error")));
+        return;
+      }
+      CH.state.achievements = r[1];
+      CH.state.users = r[0];
       render();
     });
   }

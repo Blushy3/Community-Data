@@ -5,8 +5,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../../data/Favicon/favicon-32x32.png">
   <link rel="icon" href="../../data/Favicon/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community Data</title>
+  <title>Minecraft Server — Community Data</title>
   <meta name="description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
+  <meta property="og:title" content="Minecraft Server — Community Data">
+  <meta property="og:description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -147,21 +150,32 @@
       function setOffline(label) {
         status.className = 'status off';
         statusText.textContent = label || 'Offline';
-        players.innerHTML = '<b>—</b>/—';
+        players.textContent = '';
+        var dash = document.createElement('b');
+        dash.textContent = '—';
+        players.appendChild(dash);
+        players.appendChild(document.createTextNode('/—'));
         version.textContent = '—';
         if (motd) motd.textContent = 'The server is currently offline.';
       }
       function refresh() {
         fetch('https://api.mcsrvstat.us/3/pancerni.hsrv.pl')
-          .then(function (r) { return r.json(); })
+          .then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+          })
           .then(function (d) {
             if (d && d.online) {
               status.className = 'status';
               statusText.textContent = 'Online';
-              var on = (d.players && d.players.online != null) ? d.players.online : '—';
-              var max = (d.players && d.players.max != null) ? d.players.max : '—';
-              players.innerHTML = '<b>' + on + '</b>/' + max;
-              if (d.version) version.textContent = d.version;
+              var on = (d.players && typeof d.players.online === 'number') ? d.players.online : '—';
+              var max = (d.players && typeof d.players.max === 'number') ? d.players.max : '—';
+              players.textContent = '';
+              var bold = document.createElement('b');
+              bold.textContent = String(on);
+              players.appendChild(bold);
+              players.appendChild(document.createTextNode('/' + max));
+              if (d.version) version.textContent = String(d.version);
               if (motd && d.motd && d.motd.clean) motd.textContent = d.motd.clean.join(' ');
             } else {
               setOffline();
@@ -195,17 +209,32 @@
       if (!modal) return;
       document.querySelectorAll('.post').forEach(function (post) {
         post.addEventListener('click', function () {
-          meta.innerHTML = '<span class="ver">' + post.dataset.ver + '</span><span class="date">' + post.dataset.date + '</span>';
-          title.textContent = post.dataset.title;
-          var html = '';
-          if (post.dataset.desc) html += '<p>' + post.dataset.desc + '</p>';
+          meta.textContent = '';
+          var v = document.createElement('span');
+          v.className = 'ver';
+          v.textContent = post.dataset.ver || '';
+          var d = document.createElement('span');
+          d.className = 'date';
+          d.textContent = post.dataset.date || '';
+          meta.appendChild(v);
+          meta.appendChild(d);
+          title.textContent = post.dataset.title || '';
+          body.textContent = '';
+          if (post.dataset.desc) {
+            var p = document.createElement('p');
+            p.textContent = post.dataset.desc;
+            body.appendChild(p);
+          }
           var points = (post.dataset.points || '').split('|').filter(Boolean);
           if (points.length) {
-            html += '<ul>';
-            points.forEach(function (p) { html += '<li>' + p + '</li>'; });
-            html += '</ul>';
+            var ul = document.createElement('ul');
+            points.forEach(function (t) {
+              var li = document.createElement('li');
+              li.textContent = t;
+              ul.appendChild(li);
+            });
+            body.appendChild(ul);
           }
-          body.innerHTML = html;
           modal.hidden = false;
         });
       });

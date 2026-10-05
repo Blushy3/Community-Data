@@ -59,7 +59,8 @@
 
     list.forEach(function (p) {
       var card = CH.el("a", "card proj-card");
-      card.href = p.page ? CH.asset(p.page) : "#";
+      var pageUrl = p.page ? CH.safeUrl(CH.asset(p.page)) : "";
+      card.href = pageUrl || "#";
 
       var thumbWrap = CH.el("div", "thumb-wrap");
       var thumb = new Image();
@@ -124,7 +125,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     if (window.CH && CH.fetchJSON) {
-      document.getElementById("searchInput").addEventListener("input", render);
+      document.getElementById("searchInput").addEventListener("input", CH.debounce(render, 160));
       document.getElementById("tagFilter").addEventListener("change", render);
       document.addEventListener("ch:langchange", function () {
         if (CH.state.other.length) { fillTags(); render(); }

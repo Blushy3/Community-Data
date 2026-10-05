@@ -1,5 +1,5 @@
-﻿/* ============================================================
-   Community Hub â€” core module
+/* ============================================================
+   Community Data \u2014 core module
    i18n loading, language switcher, header/nav, toast,
    data helpers, security (URL/text sanitizing), empty states.
    ============================================================ */
@@ -47,7 +47,7 @@
   // below the root we must prefix them with BASE so they resolve correctly.
   CH.asset = function (p) {
     p = String(p == null ? "" : p);
-    while (p.length && p[0] === ".") { p = p.slice(p.indexOf("/") + 1); }
+    while (p.length && p[0] === "." && p.indexOf("/") !== -1) { p = p.slice(p.indexOf("/") + 1); }
     return BASE + p;
   };
 
@@ -81,19 +81,18 @@
 
   /* ---------- fetch with error handling ---------- */
   CH.fetchJSON = function (url) {
-    return fetch(BASE + url, { cache: "no-store" })
+    return fetch(BASE + url)
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
       .catch(function () {
-        CH.writeError();
         return null;
       });
   };
 
   CH.fetchText = function (url) {
-    return fetch(BASE + url, { cache: "no-store" })
+    return fetch(BASE + url)
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.text();
@@ -154,16 +153,23 @@
   function applyTranslations() {
     var nodes = document.querySelectorAll("[data-i18n]");
     Array.prototype.forEach.call(nodes, function (node) {
-      node.textContent = CH.t(node.getAttribute("data-i18n"));
+      var key = node.getAttribute("data-i18n");
+      var resolved = CH.t(key);
+      // never overwrite the built-in English text with a raw key (e.g. offline)
+      if (resolved !== key) node.textContent = resolved;
     });
     var phs = document.querySelectorAll("[data-i18n-ph]");
     Array.prototype.forEach.call(phs, function (node) {
-      node.setAttribute("placeholder", CH.t(node.getAttribute("data-i18n-ph")));
+      var key = node.getAttribute("data-i18n-ph");
+      var resolved = CH.t(key);
+      if (resolved !== key) node.setAttribute("placeholder", resolved);
     });
     // dynamic string fill: {key:value} with [data-i18n-fmt]
     var fmts = document.querySelectorAll("[data-i18n-fmt]");
     Array.prototype.forEach.call(fmts, function (node) {
-      var tpl = CH.t(node.getAttribute("data-i18n-fmt"));
+      var fkey = node.getAttribute("data-i18n-fmt");
+      var tpl = CH.t(fkey);
+      if (tpl === fkey) return;
       Array.prototype.forEach.call(node.attributes, function (attr) {
         if (attr.name.indexOf("data-i18n-p-") === 0) {
           var token = attr.name.slice("data-i18n-p-".length);
@@ -184,49 +190,6 @@
     Array.prototype.forEach.call(btns, function (b) {
       var active = b.getAttribute("data-lang-opt") === CH.state.lang;
       b.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-  }
-
-  function initLangSwitch() {
-    var wrap = document.getElementById("langSwitch");
-    var btn = document.getElementById("langBtn");
-    var btns = document.querySelectorAll("[data-lang-opt]");
-    if (!wrap || !btn) return;
-
-    function close() { wrap.classList.remove("open"); }
-
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      wrap.classList.toggle("open");
-    });
-    Array.prototype.forEach.call(btns, function (b) {
-      b.addEventListener("click", function () {
-        CH.setLanguage(b.getAttribute("data-lang-opt"));
-        close();
-      });
-    });
-    document.addEventListener("click", function (e) {
-      if (!wrap.contains(e.target)) close();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") close();
-    });
-  }
-
-  /* ---------- mobile nav ---------- */
-  function initNav() {
-    var burger = document.getElementById("burger");
-    var nav = document.getElementById("mainNav");
-    if (!burger || !nav) return;
-    burger.addEventListener("click", function () {
-      var open = nav.classList.toggle("open");
-      burger.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    Array.prototype.forEach.call(nav.querySelectorAll("a"), function (a) {
-      a.addEventListener("click", function () {
-        nav.classList.remove("open");
-        burger.setAttribute("aria-expanded", "false");
-      });
     });
   }
 
@@ -271,7 +234,7 @@
   CH.writeError = function (container) {
     if (!container) return;
     var box = CH.el("div", "empty-state");
-    box.appendChild(CH.el("div", "ic", "âš "));
+    box.appendChild(CH.el("div", "ic", "\u26A0"));
     box.appendChild(CH.el("p", null, CH.t("common.error")));
     container.appendChild(box);
   };
@@ -281,6 +244,17 @@
     box.appendChild(CH.el("div", "ic", "✦"));
     box.appendChild(CH.el("p", null, message));
     return box;
+  };
+
+  /* ---------- shared debounce helper ---------- */
+  CH.debounce = function (fn, wait) {
+    var timer = null;
+    wait = wait || 150;
+    return function () {
+      var args = arguments, self = this;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(self, args); }, wait);
+    };
   };
 
   
@@ -346,28 +320,31 @@
   /* ---------- boot ---------- */
   CH.init = function () {
 
-    // cache English fallback once, then apply saved/preferred language
-    if (!window.__EN_FALLBACK) {
-      CH.fetchText("data/i18n/en.json").then(function (text) {
-        try { window.__EN_FALLBACK = JSON.parse(String(text).replace(/^\uFEFF/, "")); } catch (e) { window.__EN_FALLBACK = {}; }
-        CH.state.lang = getLang();
-        loadI18n(CH.state.lang).then(function () {
-          applyTranslations();
-          updateLangUI();
-          document.documentElement.lang = CH.state.lang;
-          finishReady();
-        });
+    // Load the English fallback and the chosen language pack in parallel.
+    // For "en" the fallback IS the pack — no duplicate request.
+    CH.state.lang = getLang();
+    var pEn = CH.fetchText("data/i18n/en.json").then(function (text) {
+      try { window.__EN_FALLBACK = JSON.parse(String(text).replace(/^\uFEFF/, "")); } catch (e) { window.__EN_FALLBACK = {}; }
+    });
+    var pLang;
+    if (CH.state.lang === DEFAULT_LANG) {
+      pLang = pEn.then(function () {
+        try { CH.state.t = JSON.parse(JSON.stringify(window.__EN_FALLBACK || {})); } catch (e) { CH.state.t = {}; }
       });
     } else {
-      finishReady();
+      pLang = loadI18n(CH.state.lang);
     }
+    Promise.all([pEn, pLang]).then(function () {
+      applyTranslations();
+      updateLangUI();
+      document.documentElement.lang = CH.state.lang;
+      finishReady();
+    });
 
-    // build the bottom dock only after translations are available
     // scroll-reveal observer
     if (window.IntersectionObserver) {
-      setTimeout(function () {
-        var els = document.querySelectorAll(".reveal");
-        if (!els.length) return;
+      var els = document.querySelectorAll(".reveal");
+      if (els.length) {
         var obs = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
@@ -377,7 +354,7 @@
           });
         }, { threshold: 0.1 });
         Array.prototype.forEach.call(els, function (el) { obs.observe(el); });
-      }, 200);
+      }
     } else {
       Array.prototype.forEach.call(document.querySelectorAll(".reveal"), function (el) { el.classList.add("visible"); });
     }

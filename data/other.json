@@ -3,7 +3,7 @@
     "id": "minecraft",
     "title": "Minecraft Server",
     "description": "Our community Minecraft server.",
-    "image": "./assets/projects/minecraft.png",
+    "image": "./assets/projects/minecraft.webp",
     "page": "./projects/minecraft/",
     "status": "Active",
     "tags": [
@@ -18,7 +18,7 @@
     "id": "rules",
     "title": "Discord Rules",
     "description": "Community Discord server rules and guidelines.",
-    "image": "./assets/projects/rules.png",
+    "image": "./assets/projects/rules.webp",
     "page": "./projects/rules/",
     "status": "Active",
     "tags": [

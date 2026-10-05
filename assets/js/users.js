@@ -11,9 +11,29 @@
     });
     return out;
   }
+  function fillSort() {
+    var sel = document.getElementById("sortFilter");
+    if (!sel) return;
+    sel.innerHTML = "";
+    var defs = [
+      ["", "users.sortDefault"],
+      ["name", "users.sortName"],
+      ["achievements", "users.sortAchievements"],
+      ["role", "users.sortRole"]
+    ];
+    defs.forEach(function (d) {
+      var o = document.createElement("option");
+      o.value = d[0];
+      o.textContent = CH.t("common.sort") + " · " + CH.t(d[1]);
+      sel.appendChild(o);
+    });
+  }
+
   function filtered() {
     var q = (document.getElementById("searchInput").value || "").toLowerCase().trim();
-    return (CH.state.users || []).filter(function (u) {
+    var sortSel = document.getElementById("sortFilter");
+    var sort = sortSel ? sortSel.value : "";
+    var list = (CH.state.users || []).filter(function (u) {
       if (!u || !u.id) return false;
       if (q) {
         var hay = ((u.name || "") + " " + (u.bio || "") + " " + (u.role || "")).toLowerCase();
@@ -21,6 +41,18 @@
       }
       return true;
     });
+    if (sort === "name") {
+      list.sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || "")); });
+    } else if (sort === "achievements") {
+      list.sort(function (a, b) { return userAchievements(b.id).length - userAchievements(a.id).length; });
+    } else if (sort === "role") {
+      list.sort(function (a, b) {
+        var ra = /admin/i.test(a.role || "") ? 1 : 0;
+        var rb = /admin/i.test(b.role || "") ? 1 : 0;
+        return rb - ra;
+      });
+    }
+    return list;
   }
   function render() {
     var grid = document.getElementById("userGrid");
@@ -48,7 +80,7 @@
 
       card.appendChild(CH.el("span", "card-arrow", "\u2192"));
 
-      function open() { window.location.href = "../profile/?id=" + u.id; }
+      function open() { window.location.href = "../profile/?id=" + encodeURIComponent(u.id); }
       card.addEventListener("click", open);
       card.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
@@ -71,13 +103,18 @@
       if (!Array.isArray(r[0])) { var grid = document.getElementById("userGrid"); if (grid) grid.appendChild(CH.emptyState(CH.t("common.error"))); return; }
       var statsEl = document.getElementById("userStats");
       if (statsEl) statsEl.textContent = CH.state.users.length + " " + CH.t("home.snapshotMembers");
+      fillSort();
       render();
     });
   }
   document.addEventListener("DOMContentLoaded", function () {
     if (window.CH && CH.fetchJSON) {
-      document.getElementById("searchInput").addEventListener("input", render);
-      document.addEventListener("ch:langchange", function () { if (CH.state.users.length) render(); });
+      document.getElementById("searchInput").addEventListener("input", CH.debounce(render, 160));
+      var sortSel = document.getElementById("sortFilter");
+      if (sortSel) sortSel.addEventListener("change", render);
+      document.addEventListener("ch:langchange", function () {
+        if (CH.state.users.length) { fillSort(); render(); }
+      });
       CH.onReady(load);
     }
   });
