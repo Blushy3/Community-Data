@@ -145,7 +145,7 @@
     if (/^(https?:)\/\//i.test(url)) return url;
     if (allowMailto && /^mailto:/i.test(url)) return url;
     // allow relative (./ ../ /) paths for same-site links
-    if (/^\\.{1,2}\//.test(url) || /^\//.test(url)) return url;
+    if (/^\.{1,2}\//.test(url) || /^\//.test(url)) return url;
     return "";
   };
 
