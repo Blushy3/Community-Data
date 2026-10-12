@@ -13,14 +13,31 @@
   <meta property="og:image" content="assets/projects/minecraft.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Fragment+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="./index.html"><span id="brandName">Community Hub</span></a>
+  <header class="masthead">
+    <div class="mast-util">
+      <span>Community journal</span>
+      <span class="clock-utc">--:--:-- WARSAW</span>
+      <span>Ver. 3.0 / Index</span>
+    </div>
+    <div class="mast-brand">
+      <span class="mast-word" id="brandName">Community Data</span>
+      <span class="mast-sub">The community index</span>
+    </div>
+    <nav class="mast-nav" aria-label="Sections">
+      <a href="./index.html" aria-current="page">Home</a>
+      <a href="./pages/achievements/">Achievements</a>
+      <a href="./pages/users/">Users</a>
+      <a href="./pages/other/">Other</a>
+    </nav>
+  </header>
+  <div class="site-header">
+    <div class="navbar">
+      <a class="nav-brand brand" href="./index.html"><i class="nav-mark" aria-hidden="true"></i><span>Community Data</span></a>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
         <ul>
           <li><a href="./index.html" aria-current="page" data-i18n="nav.home">Home</a></li>
@@ -29,38 +46,38 @@
           <li><a href="./pages/other/" data-i18n="nav.other">Other</a></li>
         </ul>
       </nav>
-      <div class="header-actions">
-        <div class="lang-switch" id="langSwitch">
-          <button class="lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false">
-            <span class="lang-code">EN</span><span class="caret">&#9660;</span>
-          </button>
-          <div class="lang-menu" role="menu">
-            <button type="button" role="menuitem" data-lang-opt="en" aria-pressed="false">English</button>
-            <button type="button" role="menuitem" data-lang-opt="pl" aria-pressed="false">Polski</button>
-            <button type="button" role="menuitem" data-lang-opt="es" aria-pressed="false">Espanol</button>
-          </div>
-        </div>
+      <div class="nav-side">
+        <span class="clock-utc">--:--:-- WARSAW</span>
         <button class="burger" id="burger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-  </header>
+  </div>
   <main id="main">
     <section class="hero-wrap">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="container hero">
-        <p class="kicker hero-item" data-i18n="kick.home">Members · Achievements · Projects</p>
-        <h1 id="communityName" class="hero-item">Community Data</h1>
-        <p class="tagline hero-item" data-i18n="home.tagline">A private community built by its members.</p>
-        <p class="intro hero-item" data-i18n="home.intro">A curated collection of member profiles, achievements and projects.</p>
-        <div class="hero-ctas hero-item">
-          <a class="btn btn-accent" id="discordBtn" href="#" target="_blank" rel="noopener" data-i18n="nav.discord">Join Discord</a>
-          <a class="btn btn-ghost" href="#snapshotSection" data-i18n="kick.explore">Explore</a>
+      <div class="hero">
+        <div class="hero-copy" data-parallax="-0.05">
+          <p class="kicker hero-item" data-i18n="kick.home">Members · Achievements · Projects</p>
+          <h1 id="communityName" class="hero-item">Community Data</h1>
+          <p class="deck hero-item" data-i18n="home.tagline">A private community built by its members.</p>
+          <p class="intro hero-item" data-i18n="home.intro">A curated collection of member profiles, achievements and projects.</p>
+          <div class="hero-ctas hero-item">
+            <a class="btn btn-accent" id="discordBtn" href="#" target="_blank" rel="noopener" data-i18n="nav.discord">Join Discord</a>
+            <a class="btn btn-ghost" href="#snapshotSection" data-i18n="kick.explore">Explore</a>
+          </div>
         </div>
-      </div>
-      <div class="marquee" aria-hidden="true">
-        <div class="marquee-track" id="achMarquee"></div>
+        <div class="hero-seal" aria-hidden="true" data-parallax="0.12">
+          <svg class="seal" viewBox="0 0 200 200" role="img" aria-label="Community seal">
+            <defs>
+              <path id="sealArc" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/>
+            </defs>
+            <circle class="seal-ring" cx="100" cy="100" r="60"/>
+            <circle class="seal-dash" cx="100" cy="100" r="52"/>
+            <text><textPath href="#sealArc">COMMUNITY DATA · MEMBERS · ACHIEVEMENTS · PROJECTS · </textPath></text>
+            <rect class="seal-core" x="93" y="93" width="14" height="14" transform="rotate(45 100 100)"/>
+          </svg>
+        </div>
       </div>
     </section>
     <section class="container section" id="snapshotSection" hidden>

@@ -8,9 +8,7 @@
 
   var CH = (window.CH = window.CH || {});
 
-  var DEFAULT_LANG = "en";
-  var LANG_KEY = "ch-lang";
-  var LANGS = ["en", "pl", "es"];
+  var DEFAULT_LANG = "en"; // v4 — English-only site
   // Site root prefix relative to the current page. Set via window.CH_BASE
   // (e.g. "../" on /achievements/, "../../" inside a profile, "" on Home).
   var BASE = window.CH_BASE || "";
@@ -51,34 +49,6 @@
     return BASE + p;
   };
 
-  /* ---------- storage ---------- */
-  function getLang() {
-    var stored = null;
-    try { stored = localStorage.getItem(LANG_KEY); } catch (e) { stored = null; }
-    var detected = (navigator.language || "en").slice(0, 2).toLowerCase();
-    var chosen = LANGS.indexOf(stored) !== -1 ? stored
-      : (LANGS.indexOf(detected) !== -1 ? detected : DEFAULT_LANG);
-    return chosen;
-  }
-
-  function setLang(lang) {
-    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* ignore */ }
-  }
-
-  CH.setLanguage = function (lang) {
-    if (LANGS.indexOf(lang) === -1) lang = DEFAULT_LANG;
-    CH.state.lang = lang;
-    setLang(lang);
-    loadI18n(lang).then(function () {
-      applyTranslations();
-      updateLangUI();
-      document.documentElement.lang = lang;
-      if (document.dispatchEvent) {
-        document.dispatchEvent(new CustomEvent("ch:langchange", { detail: { lang: lang } }));
-      }
-    });
-  };
-
   /* ---------- fetch with error handling ---------- */
   CH.fetchJSON = function (url) {
     return fetch(BASE + url)
@@ -100,9 +70,9 @@
       .catch(function () { return ""; });
   };
 
-  /* ---------- i18n ---------- */
-  function loadI18n(lang) {
-    return CH.fetchText("data/i18n/" + lang + ".json").then(function (text) {
+  /* ---------- i18n (English only, v4) ---------- */
+  function loadI18n() {
+    return CH.fetchText("data/i18n/en.json").then(function (text) {
       try {
         CH.state.t = JSON.parse(String(text).replace(/^\uFEFF/, ""));
       } catch (e) {
@@ -180,18 +150,6 @@
     });
   }
   CH.applyTranslations = applyTranslations;
-
-  /* ---------- language switcher UI ---------- */
-  function updateLangUI() {
-    var btn = document.getElementById("langBtn");
-    var btns = document.querySelectorAll("[data-lang-opt]");
-    var code = btn ? btn.querySelector(".lang-code") : null;
-    if (code) code.textContent = CH.state.lang.toUpperCase();
-    Array.prototype.forEach.call(btns, function (b) {
-      var active = b.getAttribute("data-lang-opt") === CH.state.lang;
-      b.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-  }
 
   /* ---------- toast ---------- */
   var toastTimer = null;
@@ -310,36 +268,62 @@
     function frame(ts) {
       if (start === null) start = ts;
       var p = Math.min(1, (ts - start) / duration);
-      var eased = 1 - Math.pow(1 - p, 3);
+      // easeOutBack — gentle spring overshoot for a premium feel
+      var q = p - 1;
+      var eased = 1 + 2.70158 * q * q * q + 1.70158 * q * q;
       el.textContent = String(Math.round(eased * target));
       if (p < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   };
 
+  /* ---------- live Warsaw clock (masthead + navbar) ---------- */
+  function initClock() {
+    var nodes = document.querySelectorAll(".clock-utc");
+    if (!nodes.length) return;
+    var fmt = null;
+    try {
+      // Europe/Warsaw handles CET/CEST daylight saving automatically
+      fmt = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Warsaw",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23"
+      });
+    } catch (e) { fmt = null; }
+    function tick() {
+      var d = new Date();
+      var s;
+      if (fmt) {
+        s = fmt.format(d).replace(/^24:/, "00:") + " WARSAW";
+      } else {
+        // graceful fallback: visitor's local time
+        s = d.toLocaleTimeString("en-GB", { hour12: false }) + " LOCAL";
+      }
+      Array.prototype.forEach.call(nodes, function (n) { n.textContent = s; });
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
   /* ---------- boot ---------- */
   CH.init = function () {
 
-    // Load the English fallback and the chosen language pack in parallel.
-    // For "en" the fallback IS the pack — no duplicate request.
-    CH.state.lang = getLang();
+    // English-only: single pack request, then translate.
+    CH.state.lang = DEFAULT_LANG;
     var pEn = CH.fetchText("data/i18n/en.json").then(function (text) {
       try { window.__EN_FALLBACK = JSON.parse(String(text).replace(/^\uFEFF/, "")); } catch (e) { window.__EN_FALLBACK = {}; }
     });
-    var pLang;
-    if (CH.state.lang === DEFAULT_LANG) {
-      pLang = pEn.then(function () {
-        try { CH.state.t = JSON.parse(JSON.stringify(window.__EN_FALLBACK || {})); } catch (e) { CH.state.t = {}; }
-      });
-    } else {
-      pLang = loadI18n(CH.state.lang);
-    }
+    var pLang = loadI18n();
     Promise.all([pEn, pLang]).then(function () {
       applyTranslations();
-      updateLangUI();
-      document.documentElement.lang = CH.state.lang;
+      document.documentElement.lang = DEFAULT_LANG;
       finishReady();
     });
+
+    // live Warsaw clock in the masthead + navbar
+    initClock();
 
     // scroll-reveal observer
     if (window.IntersectionObserver) {
@@ -359,44 +343,28 @@
       Array.prototype.forEach.call(document.querySelectorAll(".reveal"), function (el) { el.classList.add("visible"); });
     }
 
-    // header scroll effect (blur on scroll)
+    // header scroll effect — the ink navbar slides in only AFTER the
+    // static masthead has fully scrolled away (no overlap, later entry)
     var header = document.querySelector(".site-header");
     if (header) {
+      var mast = document.querySelector(".masthead");
+      function navLimit() {
+        return mast && mast.offsetHeight ? mast.offsetHeight + 28 : 240;
+      }
       var ticking = false;
       window.addEventListener("scroll", function () {
         if (!ticking) {
           requestAnimationFrame(function () {
-            header.classList.toggle("scrolled", window.scrollY > 40);
+            header.classList.toggle("scrolled", window.scrollY > navLimit());
             ticking = false;
           });
           ticking = true;
         }
+      }, { passive: true });
+      window.addEventListener("resize", function () {
+        header.classList.toggle("scrolled", window.scrollY > navLimit());
       });
     }
-
-    // Language switcher - click to open
-    var langSwitch = document.getElementById("langSwitch");
-    var langBtn = document.getElementById("langBtn");
-    if (langSwitch && langBtn) {
-      langBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        langSwitch.classList.toggle("open");
-      });
-      document.addEventListener("click", function (e) {
-        if (!langSwitch.contains(e.target)) langSwitch.classList.remove("open");
-      });
-    }
-
-
-    // Language menu buttons - change language
-    var langOpts = document.querySelectorAll("[data-lang-opt]");
-    Array.prototype.forEach.call(langOpts, function (btn) {
-      btn.addEventListener("click", function () {
-        CH.setLanguage(btn.getAttribute("data-lang-opt"));
-        var langSwitch = document.getElementById("langSwitch");
-        if (langSwitch) langSwitch.classList.remove("open");
-      });
-    });
 
     // Burger nav
     var burger = document.getElementById("burger");
@@ -412,6 +380,204 @@
     }
 
   };
-  document.addEventListener("DOMContentLoaded", CH.init);
+
+  /* ============================================================
+     v3 MOTION SUITE — scroll progress bar, cursor companion,
+     3D tilt + spotlight cards (event-delegated, so dynamically
+     rendered content is covered automatically), magnetic
+     controls, ripple pulses and hero parallax layers.
+     Progressive enhancement only: requires a fine pointer and
+     respects prefers-reduced-motion. No existing hook changes.
+     ============================================================ */
+  function motionEnabled() {
+    if (!window.matchMedia) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    if (!window.matchMedia("(pointer: fine)").matches) return false;
+    return true;
+  }
+
+  function initMotion() {
+    if (!motionEnabled()) return;
+
+    /* --- scroll progress bar --- */
+    var progress = document.createElement("div");
+    progress.className = "scroll-progress";
+    progress.setAttribute("aria-hidden", "true");
+    document.body.appendChild(progress);
+
+    var progTicking = false;
+    function updateProgress() {
+      progTicking = false;
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - window.innerHeight) || 1;
+      var y = window.scrollY || doc.scrollTop || 0;
+      var p = Math.min(1, Math.max(0, y / max));
+      progress.style.transform = "scaleX(" + p + ")";
+    }
+    window.addEventListener("scroll", function () {
+      if (progTicking) return;
+      progTicking = true;
+      requestAnimationFrame(updateProgress);
+    }, { passive: true });
+    updateProgress();
+
+    /* --- cursor companion: crisp gold dot + lagging spectral ring --- */
+    var dot = document.createElement("div");
+    dot.className = "cursor-dot";
+    dot.setAttribute("aria-hidden", "true");
+    var ring = document.createElement("div");
+    ring.className = "cursor-ring";
+    ring.setAttribute("aria-hidden", "true");
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    var mx = -100, my = -100, rx = -100, ry = -100, cursorOn = false, ringRunning = false;
+    function ringLoop() {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      dot.style.transform = "translate3d(" + mx + "px," + my + "px,0)";
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      if (Math.abs(mx - rx) + Math.abs(my - ry) > 0.4) {
+        requestAnimationFrame(ringLoop);
+      } else {
+        ringRunning = false;
+      }
+    }
+    document.addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (!cursorOn) {
+        cursorOn = true; rx = mx; ry = my;
+        dot.classList.add("on"); ring.classList.add("on");
+      }
+      if (!ringRunning) { ringRunning = true; requestAnimationFrame(ringLoop); }
+    }, { passive: true });
+    document.addEventListener("mouseover", function (e) {
+      var t = e.target;
+      var hot = !!(t && t.closest && t.closest("a, button, .card, input, select, [tabindex]"));
+      ring.classList.toggle("hot", hot);
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", function () {
+      cursorOn = false;
+      dot.classList.remove("on");
+      ring.classList.remove("on");
+    });
+
+    /* --- 3D tilt + cursor spotlight (delegated → covers dynamic cards) --- */
+    var TILT = 5;
+    var tiltEl = null, tiltRaf = false, tiltX = 0, tiltY = 0;
+    function cardOf(target) {
+      return (target && target.closest) ? target.closest(".card, .profile-ach-item") : null;
+    }
+    function applyTilt() {
+      tiltRaf = false;
+      if (!tiltEl || !tiltEl.isConnected) { tiltEl = null; return; }
+      var r = tiltEl.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var px = (tiltX - r.left) / r.width * 100;
+      var py = (tiltY - r.top) / r.height * 100;
+      tiltEl.style.setProperty("--mx", px.toFixed(2) + "%");
+      tiltEl.style.setProperty("--my", py.toFixed(2) + "%");
+      tiltEl.style.setProperty("--rx", ((50 - py) / 50 * TILT).toFixed(2) + "deg");
+      tiltEl.style.setProperty("--ry", ((px - 50) / 50 * TILT).toFixed(2) + "deg");
+    }
+    document.addEventListener("pointerover", function (e) {
+      var el = cardOf(e.target);
+      if (el && el !== tiltEl) {
+        tiltEl = el;
+        tiltX = e.clientX; tiltY = e.clientY;
+        el.classList.add("tilting");
+        if (!tiltRaf) { tiltRaf = true; requestAnimationFrame(applyTilt); }
+      }
+    }, { passive: true });
+    document.addEventListener("pointermove", function (e) {
+      if (!tiltEl) return;
+      tiltX = e.clientX; tiltY = e.clientY;
+      if (!tiltRaf) { tiltRaf = true; requestAnimationFrame(applyTilt); }
+    }, { passive: true });
+    document.addEventListener("pointerout", function (e) {
+      var el = cardOf(e.target);
+      if (el && (!e.relatedTarget || !el.contains(e.relatedTarget))) {
+        el.classList.remove("tilting");
+        el.style.removeProperty("--rx");
+        el.style.removeProperty("--ry");
+        if (el === tiltEl) tiltEl = null;
+      }
+    }, { passive: true });
+
+    /* --- magnetic controls --- */
+    var MAG = 6;
+    // dropdown/select buttons excluded — they must not move on hover
+    var MAG_SEL = ".btn, .burger, .back-link, .brand";
+    var magEl = null, magRaf = false, magX = 0, magY = 0;
+    function applyMag() {
+      magRaf = false;
+      if (!magEl || !magEl.isConnected) { magEl = null; return; }
+      var r = magEl.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var dx = Math.max(-1, Math.min(1, (magX - (r.left + r.width / 2)) / (r.width / 2)));
+      var dy = Math.max(-1, Math.min(1, (magY - (r.top + r.height / 2)) / (r.height / 2)));
+      magEl.style.setProperty("--mag-x", (dx * MAG).toFixed(2) + "px");
+      magEl.style.setProperty("--mag-y", (dy * MAG).toFixed(2) + "px");
+    }
+    document.addEventListener("pointerover", function (e) {
+      var t = e.target;
+      var el = (t && t.closest) ? t.closest(MAG_SEL) : null;
+      if (el) magEl = el;
+    }, { passive: true });
+    document.addEventListener("pointermove", function (e) {
+      if (!magEl) return;
+      magX = e.clientX; magY = e.clientY;
+      if (!magRaf) { magRaf = true; requestAnimationFrame(applyMag); }
+    }, { passive: true });
+    document.addEventListener("pointerout", function (e) {
+      var t = e.target;
+      var el = (t && t.closest) ? t.closest(MAG_SEL) : null;
+      if (el && (!e.relatedTarget || !el.contains(e.relatedTarget))) {
+        el.style.removeProperty("--mag-x");
+        el.style.removeProperty("--mag-y");
+        if (el === magEl) magEl = null;
+      }
+    }, { passive: true });
+
+    /* --- ripple pulse on primary buttons --- */
+    document.addEventListener("click", function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest(".btn") : null;
+      if (!btn) return;
+      var r = btn.getBoundingClientRect();
+      var size = Math.max(r.width, r.height) * 2.2;
+      var s = document.createElement("span");
+      s.className = "ripple";
+      s.style.width = s.style.height = size + "px";
+      s.style.left = (e.clientX - r.left - size / 2) + "px";
+      s.style.top = (e.clientY - r.top - size / 2) + "px";
+      btn.appendChild(s);
+      setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 700);
+    });
+
+    /* --- hero parallax layers ([data-parallax]) --- */
+    var layers = document.querySelectorAll("[data-parallax]");
+    if (layers.length) {
+      var parTicking = false;
+      function updateParallax() {
+        parTicking = false;
+        var y = window.scrollY || document.documentElement.scrollTop || 0;
+        Array.prototype.forEach.call(layers, function (el) {
+          var f = parseFloat(el.getAttribute("data-parallax")) || 0;
+          el.style.setProperty("--py", (y * f).toFixed(1) + "px");
+        });
+      }
+      window.addEventListener("scroll", function () {
+        if (parTicking) return;
+        parTicking = true;
+        requestAnimationFrame(updateParallax);
+      }, { passive: true });
+      updateParallax();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    CH.init();
+    initMotion();
+  });
 })();
 
