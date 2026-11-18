@@ -6,38 +6,30 @@
   <link rel="icon" href="data/Favicon/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Community Data</title>
-  <meta name="description" content="Community Data is a curated collection of member profiles, achievements and projects.">
+  <meta name="description" content="Community Data is a curated archive of member profiles, achievements and projects.">
   <meta property="og:title" content="Community Data">
-  <meta property="og:description" content="A curated collection of member profiles, achievements and projects.">
+  <meta property="og:description" content="A curated archive of member profiles, achievements and projects.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/projects/minecraft.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Fragment+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fragment+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="masthead">
-    <div class="mast-util">
-      <span>Community journal</span>
-      <span class="clock-utc">--:--:-- WARSAW</span>
-      <span>Ver. 3.0 / Index</span>
-    </div>
-    <div class="mast-brand">
-      <span class="mast-word" id="brandName">Community Data</span>
-      <span class="mast-sub">The community index</span>
-    </div>
-    <nav class="mast-nav" aria-label="Sections">
-      <a href="./index.html" aria-current="page">Home</a>
-      <a href="./pages/achievements/">Achievements</a>
-      <a href="./pages/users/">Users</a>
-      <a href="./pages/other/">Other</a>
-    </nav>
-  </header>
-  <div class="site-header">
+  <div class="util-bar">
+    <span class="util-tag">CD / Community index</span>
+    <span class="util-mid">Members &middot; Achievements &middot; Projects</span>
+    <span class="clock-utc">--:--:-- WARSAW</span>
+  </div>
+
+  <header class="site-header">
     <div class="navbar">
-      <a class="nav-brand brand" href="./index.html"><i class="nav-mark" aria-hidden="true"></i><span>Community Data</span></a>
+      <a class="nav-brand brand" href="./index.html">
+        <i class="nav-mark" aria-hidden="true"></i>
+        <span id="brandName">Community Data</span>
+      </a>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
         <ul>
           <li><a href="./index.html" aria-current="page" data-i18n="nav.home">Home</a></li>
@@ -47,57 +39,124 @@
         </ul>
       </nav>
       <div class="nav-side">
-        <span class="clock-utc">--:--:-- WARSAW</span>
+        <a class="nav-cta" href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Discord</a>
         <button class="burger" id="burger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-  </div>
+  </header>
+
   <main id="main">
-    <section class="hero-wrap">
-      <div class="hero">
-        <div class="hero-copy" data-parallax="-0.05">
-          <p class="kicker hero-item" data-i18n="kick.home">Members · Achievements · Projects</p>
-          <h1 id="communityName" class="hero-item">Community Data</h1>
-          <p class="deck hero-item" data-i18n="home.tagline">A private community built by its members.</p>
-          <p class="intro hero-item" data-i18n="home.intro">A curated collection of member profiles, achievements and projects.</p>
-          <div class="hero-ctas hero-item">
-            <a class="btn btn-accent" id="discordBtn" href="#" target="_blank" rel="noopener" data-i18n="nav.discord">Join Discord</a>
-            <a class="btn btn-ghost" href="#snapshotSection" data-i18n="kick.explore">Explore</a>
+    <noscript><p class="nojs">This archive renders its data with JavaScript. Enable JavaScript to view members, achievements and projects.</p></noscript>
+    <section class="hero">
+      <div class="hero-inner container">
+        <div class="hero-copy">
+          <p class="kicker">CD / 001 &mdash; Data archive</p>
+          <h1 id="communityName">Community Data</h1>
+          <p class="hero-tagline" data-i18n="home.tagline">A private community built for storage data.</p>
+          <p class="hero-intro" data-i18n="home.intro">A curated collection of member profiles, achievements and projects.</p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" id="discordBtn" href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Join Discord</a>
+            <a class="btn btn-line" href="#snapshotSection" data-i18n="kick.explore">Explore the archive</a>
           </div>
         </div>
-        <div class="hero-seal" aria-hidden="true" data-parallax="0.12">
-          <svg class="seal" viewBox="0 0 200 200" role="img" aria-label="Community seal">
-            <defs>
-              <path id="sealArc" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/>
-            </defs>
-            <circle class="seal-ring" cx="100" cy="100" r="60"/>
-            <circle class="seal-dash" cx="100" cy="100" r="52"/>
-            <text><textPath href="#sealArc">COMMUNITY DATA · MEMBERS · ACHIEVEMENTS · PROJECTS · </textPath></text>
-            <rect class="seal-core" x="93" y="93" width="14" height="14" transform="rotate(45 100 100)"/>
+        <div class="hero-graphic" aria-hidden="true">
+          <svg class="hero-figure" viewBox="0 0 320 320" fill="none">
+            <circle class="fg-line" cx="160" cy="160" r="150"></circle>
+            <circle class="fg-hair" cx="160" cy="160" r="132"></circle>
+            <circle class="fg-dash" cx="160" cy="160" r="104"></circle>
+            <circle class="fg-line" cx="160" cy="160" r="62"></circle>
+            <line class="fg-hair" x1="160" y1="0" x2="160" y2="320"></line>
+            <line class="fg-hair" x1="0" y1="160" x2="320" y2="160"></line>
+            <line class="fg-hair" x1="10" y1="56" x2="310" y2="56"></line>
+            <rect class="fg-core" x="149" y="149" width="22" height="22" transform="rotate(45 160 160)"></rect>
+            <text class="fg-text" x="160" y="14" text-anchor="middle">CD / 001</text>
+            <text class="fg-text" x="160" y="314" text-anchor="middle">DATA_ARCHIVE</text>
           </svg>
         </div>
       </div>
+      <div class="container">
+        <div class="hero-meta">
+          <span><i>01</i> Archive index</span>
+          <span><i>02</i> Members &middot; achievements &middot; projects</span>
+          <span>Warsaw / PL</span>
+        </div>
+      </div>
     </section>
-    <section class="container section" id="snapshotSection" hidden>
-      <h2 class="section-title reveal" data-i18n="home.snapshotTitle">Community snapshot</h2>
-      <div class="grid grid-4" id="snapshotGrid"></div>
+
+    <section class="section container" id="snapshotSection">
+      <div class="section-head">
+        <div class="section-heading">
+          <p class="section-label">01 / Overview</p>
+          <h2 class="section-title" data-i18n="home.overviewTitle">Community overview</h2>
+        </div>
+        <span class="section-label">CD &mdash; Live data</span>
+      </div>
+      <div class="stats" id="snapshotGrid"></div>
     </section>
-    <section class="container section" id="featuredSection">
-      <h2 class="section-title reveal" data-i18n="kick.featured">Featured</h2>
-      <div class="featured-grid" id="featuredGrid"></div>
+
+    <section class="section container" id="membersSection">
+      <div class="section-head">
+        <div class="section-heading">
+          <p class="section-label">02 / Members</p>
+          <h2 class="section-title" data-i18n="home.membersTitle">Members</h2>
+        </div>
+        <a class="link-more" href="./pages/users/" data-i18n="home.viewAllMembers">View all members</a>
+      </div>
+      <div class="member-grid" id="memberPreview"></div>
+    </section>
+
+    <section class="section container" id="achievementsSection">
+      <div class="section-head">
+        <div class="section-heading">
+          <p class="section-label">03 / Achievements</p>
+          <h2 class="section-title" data-i18n="home.achievementsTitle">Achievements</h2>
+        </div>
+        <a class="link-more" href="./pages/achievements/" data-i18n="home.viewAllAchievements">View all achievements</a>
+      </div>
+      <div class="ach-list" id="achPreview"></div>
+    </section>
+
+    <section class="section container" id="projectsSection">
+      <div class="section-head">
+        <div class="section-heading">
+          <p class="section-label">04 / Projects</p>
+          <h2 class="section-title" data-i18n="home.projectsTitle">Projects</h2>
+        </div>
+        <a class="link-more" href="./pages/other/" data-i18n="home.viewAllProjects">View all projects</a>
+      </div>
+      <div class="proj-grid" id="projPreview"></div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="container">
-      <div class="inner">
-        <span>&copy; <span id="year">2026</span> <span id="footerBrand">Community Hub</span></span>
-        <span data-i18n="footer.rights">All rights reserved.</span>
+      <div class="footer-inner">
+        <div>
+          <span class="footer-name" id="footerBrand">Community Data</span>
+          <span class="footer-note" data-i18n="footer.note">A curated community archive</span>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="./index.html" data-i18n="nav.home">Home</a>
+          <a href="./pages/achievements/" data-i18n="nav.achievements">Achievements</a>
+          <a href="./pages/users/" data-i18n="nav.users">Users</a>
+          <a href="./pages/other/" data-i18n="nav.other">Other</a>
+        </nav>
+        <div class="footer-meta">
+          <a href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Discord</a>
+          <span>&copy; <span id="year">2026</span> &middot; <span data-i18n="footer.rights">All rights reserved.</span></span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>CD / 001</span>
+        <span>Community Data &mdash; Archive</span>
       </div>
     </div>
   </footer>
+
   <div class="toast" id="toast" role="status" aria-live="polite"><h4></h4><p></p></div>
+
   <script>window.CH_BASE = "";</script>
   <script src="./assets/js/main.js"></script>
   <script src="./assets/js/home.js"></script>

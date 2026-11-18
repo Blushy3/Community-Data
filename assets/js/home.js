@@ -1,191 +1,290 @@
 /* ============================================================
-   Home page rendering — site.json + stats + featured + marquee.
+   Home page rendering.
+   Everything on the page is generated from the existing JSON:
+     data/site.json        → name, tagline, Discord, featured ids
+     data/users.json       → overview count + members preview
+     data/achievements.json→ overview count + achievements preview
+     data/other.json       → overview count + projects preview
+   Featured items (site.featuredUser / featuredAchievement /
+   featuredProject) are pinned first when configured.
    ============================================================ */
 (function () {
   "use strict";
 
   var CH = window.CH;
+  var MEMBERS_PREVIEW = 6;
+  var ACHIEVEMENTS_PREVIEW = 6;
 
   function setText(id, value) {
     var node = document.getElementById(id);
-    if (node) node.textContent = value || "";
+    if (node && value != null) node.textContent = value;
   }
 
-  var ICONS = {
-    members: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
-    box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>'
-  };
-
-  function statCard(iconSvg, value, label) {
-    var card = CH.el("div", "card stat-card");
-    var icon = CH.el("div", "stat-icon");
-    icon.innerHTML = iconSvg;
-    card.appendChild(icon);
-    var num = CH.el("div", "stat-value", "0");
-    num.setAttribute("data-target", String(value));
-    card.appendChild(num);
-    card.appendChild(CH.el("div", "stat-label", label));
-    return card;
+  function pad(n) {
+    return ("0" + n).slice(-2);
   }
 
-  function buildSnapshot() {
-    var users = (CH.state.users || []).filter(function (u) { return u && u.id; });
-    var achievements = (CH.state.achievements || []).filter(function (a) { return a && a.id && a.published !== false; });
-    var projects = (CH.state.other || []).filter(function (p) { return p && p.id && p.published !== false; });
-
-    var grid = document.getElementById("snapshotGrid");
-    var section = document.getElementById("snapshotSection");
-    if (!grid || !section) return;
-    grid.innerHTML = "";
-    grid.appendChild(statCard(ICONS.members, users.length, CH.t("home.snapshotMembers")));
-    grid.appendChild(statCard(ICONS.star, achievements.length, CH.t("home.snapshotAchievements")));
-    grid.appendChild(statCard(ICONS.box, projects.length, CH.t("home.snapshotProjects")));
-
-    Array.prototype.forEach.call(grid.querySelectorAll(".stat-value"), function (el) {
-      CH.countUp(el, parseInt(el.getAttribute("data-target"), 10) || 0);
+  function published(list) {
+    return (list || []).filter(function (item) {
+      return item && item.id && item.published !== false;
     });
-    CH.stagger(grid.children, 120, 110);
-
-    section.hidden = false;
   }
 
-  function buildMarquee() {
-    var track = document.getElementById("achMarquee");
-    if (!track) return;
-    track.innerHTML = "";
-    var list = (CH.state.achievements || []).filter(function (a) { return a && a.published !== false && a.icon; });
-    if (!list.length) return;
-    for (var pass = 0; pass < 2; pass++) {
-      list.forEach(function (a) {
-        var img = new Image();
-        img.src = CH.asset(a.icon);
-        img.alt = "";
-        img.loading = "lazy";
-        img.title = a.name || "";
-        track.appendChild(img);
+  function byOrder(a, b) {
+    return (a.order || 0) - (b.order || 0);
+  }
+
+  function pinnedFirst(list, id, limit) {
+    var out = list.slice();
+    if (id) {
+      out.sort(function (a, b) {
+        var am = a.id === id ? 1 : 0;
+        var bm = b.id === id ? 1 : 0;
+        return bm - am;
       });
     }
-  }
-  function findById(list, id) {
-    if (!id) return null;
-    var out = null;
-    (list || []).forEach(function (item) {
-      if (item && item.id === id) out = item;
-    });
-    return out;
+    return limit ? out.slice(0, limit) : out;
   }
 
-  function linkPanel(kicker, name, desc, href, label) {
-    var box = CH.el("div", "card featured-panel");
-    box.appendChild(CH.el("div", "fp-kicker", kicker));
-    if (name) box.appendChild(CH.el("h3", "fp-name", name));
-    if (desc) box.appendChild(CH.el("p", "fp-desc", desc));
-    var safe = href ? CH.safeUrl(href) : "";
-    if (safe && label) {
-      var a = CH.el("a", "cta", label);
-      a.href = safe;
-      a.appendChild(CH.el("span", "cta-arrow", "\u2192"));
-      if (/^https?:/.test(safe)) { a.target = "_blank"; a.rel = "noopener"; }
-      box.appendChild(a);
+  function achievementsOf(userId) {
+    return published(CH.state.achievements).filter(function (a) {
+      return (a.users || []).indexOf(userId) !== -1;
+    }).length;
+  }
+
+  // "1 achievement" / "4 achievements" without changing the JSON.
+  function memberMetaLabel(n) {
+    if (n === 1) {
+      var one = CH.t("users.achievement");
+      return "1 " + (one === "users.achievement" ? "achievement" : one);
     }
-    return box;
+    return n + " " + CH.t("users.achievements");
   }
 
-  function buildFeatured() {
-    var grid = document.getElementById("featuredGrid");
+  /* ---------- A. overview stats ---------- */
+  function buildStats() {
+    var grid = document.getElementById("snapshotGrid");
     if (!grid) return;
     grid.innerHTML = "";
-    var site = CH.state.site || {};
 
-    var featUser = findById(CH.state.users, site.featuredUser);
-    if (featUser && featUser.id) {
-      grid.appendChild(linkPanel(
-        CH.t("home.featuredUser"),
-        featUser.name,
-        featUser.bio,
-        featUser.profile,
-        CH.t("users.viewProfile")
-      ));
-    }
+    var defs = [
+      { value: (CH.state.users || []).filter(function (u) { return u && u.id; }).length, label: "home.snapshotMembers" },
+      { value: published(CH.state.achievements).length, label: "home.snapshotAchievements" },
+      { value: published(CH.state.other).length, label: "home.snapshotProjects" }
+    ];
 
-    var featAch = findById(CH.state.achievements, site.featuredAchievement);
-    if (featAch && featAch.id) {
-      grid.appendChild(linkPanel(
-        CH.t("home.featuredAchievement"),
-        featAch.name,
-        featAch.description,
-        "./pages/achievements/",
-        CH.t("nav.achievements")
-      ));
-    }
+    defs.forEach(function (def, i) {
+      var stat = CH.el("div", "stat");
+      stat.appendChild(CH.el("span", "stat-index", pad(i + 1)));
+      var num = CH.el("span", "stat-value", "0");
+      num.setAttribute("data-target", String(def.value));
+      stat.appendChild(num);
+      stat.appendChild(CH.el("span", "stat-label", CH.t(def.label)));
+      grid.appendChild(stat);
+      CH.countUp(num, def.value);
+      num.setAttribute("aria-label", def.value + " " + CH.t(def.label));
+    });
 
-    var featProj = findById(CH.state.other, site.featuredProject);
-    if (featProj && featProj.id) {
-      grid.appendChild(linkPanel(
-        CH.t("home.featuredProject"),
-        featProj.title,
-        featProj.description,
-        featProj.page,
-        CH.t("other.open")
-      ));
-    }
-
-    if (grid.children.length) CH.stagger(grid.children, 120, 100);
+    CH.stagger(grid.children, 0, 70);
   }
 
-  function applySite() {
-    var site = CH.state.site;
-    if (!site) return;
-    setText("brandName", site.communityName);
-    setText("communityName", site.communityName);
-    setText("footerBrand", site.communityName);
-    if (site.communityName) document.title = site.communityName;
-    setText("year", new Date().getFullYear());
+  /* ---------- B. members preview ---------- */
+  function memberRow(user, featured) {
+    var link = CH.el("a", "member");
+    link.href = CH.asset("pages/profile/") + "?id=" + encodeURIComponent(user.id);
 
-    var discord = document.getElementById("discordBtn");
-    if (discord && site.discordUrl && /^https?:/.test(site.discordUrl)) discord.href = site.discordUrl;
+    var avatar = CH.el("span", "avatar", CH.initials(user.name || user.id));
+    avatar.style.background = CH.avatarGradient(user.name || user.id);
+    avatar.setAttribute("aria-hidden", "true");
+    link.appendChild(avatar);
+
+    var body = CH.el("div", "member-body");
+    var top = CH.el("div", "member-top");
+    top.appendChild(CH.el("span", "member-name", user.name || user.id));
+    if (user.role) {
+      top.appendChild(CH.el("span", "role" + (/admin/i.test(user.role) ? " role-admin" : ""), user.role));
+    }
+    if (featured) top.appendChild(CH.el("span", "badge", CH.t("home.featured")));
+    body.appendChild(top);
+
+    if (user.bio) body.appendChild(CH.el("div", "member-bio", user.bio));
+
+    var count = achievementsOf(user.id);
+    body.appendChild(CH.el("div", "member-meta", memberMetaLabel(count)));
+    link.appendChild(body);
+
+    var arrow = CH.el("span", "row-arrow", "\u2192");
+    arrow.setAttribute("aria-hidden", "true");
+    link.appendChild(arrow);
+    return link;
+  }
+
+  function buildMembers() {
+    var grid = document.getElementById("memberPreview");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    var site = CH.state.site || {};
+    var users = (CH.state.users || []).filter(function (u) { return u && u.id; });
+    if (!users.length) {
+      grid.appendChild(CH.emptyState(CH.t("users.empty")));
+      return;
+    }
+
+    var list = pinnedFirst(users, site.featuredUser, MEMBERS_PREVIEW);
+    list.forEach(function (user) {
+      grid.appendChild(memberRow(user, site.featuredUser === user.id));
+    });
+    CH.stagger(grid.children, 40, 55);
+  }
+
+  /* ---------- C. achievements preview ---------- */
+  function achievementRow(item) {
+    var link = CH.el("a", "ach-row");
+    link.href = CH.asset("pages/achievements/");
+
+    var icon = new Image();
+    icon.className = "ach-row-icon";
+    icon.loading = "lazy";
+    icon.alt = "";
+    icon.src = CH.asset(item.icon) || "";
+    icon.addEventListener("error", function () { icon.style.visibility = "hidden"; });
+    link.appendChild(icon);
+
+    var body = CH.el("div", "ach-row-body");
+    var top = CH.el("div", "ach-row-top");
+    top.appendChild(CH.el("span", "ach-row-name", item.name || item.id));
+    if (item.rarity) {
+      var rarity = CH.el("span", "rarity", item.rarity);
+      rarity.style.setProperty("--glow", CH.rarityColor(item.rarity));
+      top.appendChild(rarity);
+    }
+    body.appendChild(top);
+    if (item.description) body.appendChild(CH.el("div", "ach-row-desc", item.description));
+    link.appendChild(body);
+
+    if (item.category) link.appendChild(CH.el("span", "ach-row-cat", item.category));
+    return link;
+  }
+
+  function buildAchievements() {
+    var grid = document.getElementById("achPreview");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    var site = CH.state.site || {};
+    var list = published(CH.state.achievements).sort(byOrder);
+    if (!list.length) {
+      grid.appendChild(CH.emptyState(CH.t("achievements.empty")));
+      return;
+    }
+
+    pinnedFirst(list, site.featuredAchievement, ACHIEVEMENTS_PREVIEW).forEach(function (item) {
+      grid.appendChild(achievementRow(item));
+    });
+    CH.stagger(grid.children, 40, 50);
+  }
+
+  /* ---------- D. projects preview ---------- */
+  function projectCard(project) {
+    var link = CH.el("a", "proj-card");
+    var pageUrl = project.page ? CH.safeUrl(project.page) : "";
+    link.href = pageUrl ? CH.asset(pageUrl) : CH.asset("pages/other/");
+
+    var media = CH.el("div", "proj-media");
+    if (project.image) {
+      var img = new Image();
+      img.loading = "lazy";
+      img.alt = project.title || "";
+      img.src = CH.asset(project.image);
+      img.addEventListener("error", function () { media.style.display = "none"; });
+      media.appendChild(img);
+    }
+    link.appendChild(media);
+
+    var body = CH.el("div", "proj-body");
+    var row = CH.el("div", "proj-title-row");
+    row.appendChild(CH.el("h3", null, project.title || project.id));
+    if (project.status) row.appendChild(CH.el("span", "status", project.status));
+    body.appendChild(row);
+    if (project.description) body.appendChild(CH.el("p", null, project.description));
+
+    if ((project.tags || []).length) {
+      var tags = CH.el("div", "tags");
+      project.tags.forEach(function (tag) { tags.appendChild(CH.el("span", "badge", tag)); });
+      body.appendChild(tags);
+    }
+    link.appendChild(body);
+    return link;
+  }
+
+  function buildProjects() {
+    var grid = document.getElementById("projPreview");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    var site = CH.state.site || {};
+    var list = published(CH.state.other).sort(byOrder);
+    if (!list.length) {
+      grid.appendChild(CH.emptyState(CH.t("other.empty")));
+      return;
+    }
+
+    pinnedFirst(list, site.featuredProject).forEach(function (project) {
+      grid.appendChild(projectCard(project));
+    });
+    CH.stagger(grid.children, 40, 70);
+  }
+
+  /* ---------- site chrome ---------- */
+  function applySite() {
+    var site = CH.state.site || {};
+    if (site.communityName) {
+      setText("brandName", site.communityName);
+      setText("communityName", site.communityName);
+      setText("footerBrand", site.communityName);
+      document.title = site.communityName;
+    }
+    // The hero tagline comes from site.json so copy edits stay in one place.
+    var tagline = document.querySelector(".hero-tagline");
+    if (tagline && site.tagline) {
+      tagline.textContent = site.tagline;
+      tagline.removeAttribute("data-i18n");
+    }
+    setText("year", String(new Date().getFullYear()));
+    CH.bindChrome();
+  }
+
+  function renderAll() {
+    applySite();
+    buildStats();
+    buildMembers();
+    buildAchievements();
+    buildProjects();
   }
 
   function loadAll() {
-    var pSite = CH.fetchJSON("data/site.json");
-    var pUsers = CH.fetchJSON("data/users.json");
-    var pAch = CH.fetchJSON("data/achievements.json");
-    var pOther = CH.fetchJSON("data/other.json");
-
-    Promise.all([pSite, pUsers, pAch, pOther]).then(function (r) {
+    Promise.all([
+      CH.fetchJSON("data/site.json"),
+      CH.fetchJSON("data/users.json"),
+      CH.fetchJSON("data/achievements.json"),
+      CH.fetchJSON("data/other.json")
+    ]).then(function (r) {
       CH.state.site = r[0] || {};
       CH.state.users = Array.isArray(r[1]) ? r[1] : [];
       CH.state.achievements = Array.isArray(r[2]) ? r[2] : [];
       CH.state.other = Array.isArray(r[3]) ? r[3] : [];
-
-      applySite();
-      buildSnapshot();
-      buildFeatured();
-      buildMarquee();
-
-      var noFeatured = !document.querySelector("#featuredGrid .card");
-      if (noFeatured) {
-        var grid = document.getElementById("featuredGrid");
-        if (grid) grid.appendChild(CH.emptyState(CH.t("home.noFeatured")));
-      }
+      renderAll();
     });
 
+    // The site is English-only, but keep the hook so any future language
+    // switch re-renders translated labels without a reload.
     document.addEventListener("ch:langchange", function () {
-      if (CH.state.site) {
-        buildSnapshot();
-        buildFeatured();
-        buildMarquee();
-        var grid = document.getElementById("featuredGrid");
-        if (grid && !grid.children.length) {
-          grid.appendChild(CH.emptyState(CH.t("home.noFeatured")));
-        }
-      }
+      if (CH.state.site) renderAll();
     });
   }
 
   if (window.CH && CH.fetchJSON) {
     CH.onReady(loadAll);
   }
-
 })();

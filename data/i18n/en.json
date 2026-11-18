@@ -1,4 +1,4 @@
-﻿{
+{
   "nav": {
     "home": "Home",
     "achievements": "Achievements",
@@ -21,8 +21,16 @@
     "noResults": "No results found."
   },
   "home": {
-    "tagline": "Community Data is a private community built to storage data.",
+    "tagline": "A private community built for storage data.",
     "intro": "A curated collection of member profiles, achievements and projects.",
+    "overviewTitle": "Community overview",
+    "membersTitle": "Members",
+    "achievementsTitle": "Achievements",
+    "projectsTitle": "Projects",
+    "viewAllMembers": "View all members",
+    "viewAllAchievements": "View all achievements",
+    "viewAllProjects": "View all projects",
+    "featured": "Featured",
     "featuredUser": "Featured user",
     "featuredAchievement": "Featured achievement",
     "featuredProject": "Featured project",
@@ -38,10 +46,12 @@
     "empty": "No achievements have been published yet.",
     "category": "Category",
     "rarity": "Rarity",
+    "allCategories": "All categories",
+    "allRarities": "All rarities",
     "sortDefault": "Default",
     "sortRarity": "Rarity",
     "sortHolders": "Holders",
-    "sortAz": "A–Z",
+    "sortAz": "A\u2013Z",
     "holders": "Holders",
     "noHolders": "No holders yet."
   },
@@ -50,8 +60,9 @@
     "subtitle": "Browse community profiles.",
     "empty": "No community profiles have been published yet.",
     "achievements": "achievements",
+    "achievement": "achievement",
     "sortDefault": "Default",
-    "sortName": "Name A–Z",
+    "sortName": "Name A\u2013Z",
     "sortAchievements": "Most achievements",
     "sortRole": "Admins first",
     "viewProfile": "View profile",
@@ -64,6 +75,7 @@
     "empty": "No community projects are available yet.",
     "open": "Open",
     "tags": "Tags",
+    "allTags": "All tags",
     "status": "Status",
     "back": "Back to Other",
     "notFound": "Project not found."
@@ -83,8 +95,8 @@
     "footer": "Made with the Community Hub profile template."
   },
   "kick": {
-    "home": "Members · Achievements · Projects",
-    "explore": "Explore",
+    "home": "Members \u00B7 Achievements \u00B7 Projects",
+    "explore": "Explore the archive",
     "featured": "Featured",
     "achievements": "Trophy room",
     "users": "The roster",
@@ -92,6 +104,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "language": "Language"}
+    "note": "A curated community archive",
+    "language": "Language"
+  }
 }
-

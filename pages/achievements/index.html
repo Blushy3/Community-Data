@@ -5,39 +5,30 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../../data/Favicon/favicon-32x32.png">
   <link rel="icon" href="../../data/Favicon/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Achievements — Community Data</title>
+  <title>Achievements â€” Community Data</title>
   <meta name="description" content="A collectible gallery of community achievements.">
-  <meta property="og:title" content="Achievements — Community Data">
+  <meta property="og:title" content="Achievements â€” Community Data">
   <meta property="og:description" content="A collectible gallery of community achievements.">
   <meta property="og:type" content="website">
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Fragment+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fragment+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="masthead">
-    <div class="mast-util">
-      <span>Community journal</span>
-      <span class="clock-utc">--:--:-- WARSAW</span>
-      <span>Ver. 3.0 / Trophy room</span>
-    </div>
-    <div class="mast-brand">
-      <span class="mast-word" id="brandName">Community Data</span>
-      <span class="mast-sub">The trophy room</span>
-    </div>
-    <nav class="mast-nav" aria-label="Sections">
-      <a href="../../index.html">Home</a>
-      <a href="../achievements/" aria-current="page">Achievements</a>
-      <a href="../users/">Users</a>
-      <a href="../other/">Other</a>
-    </nav>
-  </header>
-  <div class="site-header">
+  <div class="util-bar">
+    <span class="util-tag">CD / Community index</span>
+    <span class="util-mid">Members &middot; Achievements &middot; Projects</span>
+    <span class="clock-utc">--:--:-- WARSAW</span>
+  </div>
+
+  <header class="site-header">
     <div class="navbar">
-      <a class="nav-brand brand" href="../../index.html"><i class="nav-mark" aria-hidden="true"></i><span>Community Data</span></a>
+      <a class="nav-brand brand" href="../../index.html">
+        <i class="nav-mark" aria-hidden="true"></i>
+        <span id="brandName">Community Data</span>
+      </a>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
         <ul>
           <li><a href="../../index.html" data-i18n="nav.home">Home</a></li>
@@ -47,40 +38,62 @@
         </ul>
       </nav>
       <div class="nav-side">
-        <span class="clock-utc">--:--:-- WARSAW</span>
+        <a class="nav-cta" href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Discord</a>
         <button class="burger" id="burger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-  </div>
+  </header>
+
   <main id="main">
+    <noscript><p class="nojs">This archive renders its data with JavaScript. Enable JavaScript to view members, achievements and projects.</p></noscript>
     <div class="container">
-      <div class="page-header">
-        <p class="kicker" data-i18n="kick.achievements">Trophy room</p>
+      <header class="page-header" data-index="02">
+        <p class="section-label" data-i18n="kick.achievements">Trophy room</p>
         <h1 data-i18n="achievements.title">Achievements</h1>
         <p class="page-sub" data-i18n="achievements.subtitle">A collectible gallery of community achievements.</p>
         <p class="page-stats" id="achStats"></p>
-      </div>
+      </header>
       <div class="view">
-      <div class="toolbar">
-        <div class="field"><input type="search" id="searchInput" data-i18n-ph="common.search" placeholder="Search..."></div>
-        <div class="field"><select id="categoryFilter"></select></div>
-        <div class="field"><select id="rarityFilter"></select></div>
-        <div class="field"><select id="sortFilter"></select></div>
-      </div>
-      <div class="grid grid-4" id="achGrid"></div>
+        <div class="toolbar">
+          <div class="field"><input type="search" id="searchInput" data-i18n-ph="common.search" placeholder="Search..."></div>
+          <div class="field"><select id="categoryFilter"></select></div>
+          <div class="field"><select id="rarityFilter"></select></div>
+          <div class="field"><select id="sortFilter"></select></div>
+        </div>
+        <div class="grid grid-4" id="achGrid"></div>
       </div>
     </div>
   </main>
+
   <footer class="site-footer">
     <div class="container">
-      <div class="inner">
-        <span>&copy; <span id="year">2026</span> Community Hub &middot; <span data-i18n="footer.rights">All rights reserved.</span></span>
+      <div class="footer-inner">
+        <div>
+          <span class="footer-name" id="footerBrand">Community Data</span>
+          <span class="footer-note" data-i18n="footer.note">A curated community archive</span>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="../../index.html" data-i18n="nav.home">Home</a>
+          <a href="../achievements/" data-i18n="nav.achievements">Achievements</a>
+          <a href="../users/" data-i18n="nav.users">Users</a>
+          <a href="../other/" data-i18n="nav.other">Other</a>
+        </nav>
+        <div class="footer-meta">
+          <a href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Discord</a>
+          <span>&copy; <span id="year">2026</span> &middot; <span data-i18n="footer.rights">All rights reserved.</span></span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>CD / 002</span>
+        <span>Community Data &mdash; Achievements</span>
       </div>
     </div>
   </footer>
+
   <div class="toast" id="toast" role="status" aria-live="polite"><h4></h4><p></p></div>
+
   <script>window.CH_BASE = "../../";</script>
   <script src="../../assets/js/main.js"></script>
   <script src="../../assets/js/achievements.js"></script>

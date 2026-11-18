@@ -5,106 +5,142 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../../data/Favicon/favicon-32x32.png">
   <link rel="icon" href="../../data/Favicon/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minecraft Server — Community Data</title>
+  <title>Minecraft Server â€” Community Data</title>
   <meta name="description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
-  <meta property="og:title" content="Minecraft Server — Community Data">
+  <meta property="og:title" content="Minecraft Server â€” Community Data">
   <meta property="og:description" content="Official Minecraft server of the Community Data community. Survival, autumn vibes.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..900&family=Fragment+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fragment+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/minecraft.css">
 </head>
 <body>
-  <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="util-bar">
+    <span class="util-tag">CD / Community index</span>
+    <span class="util-mid">Members &middot; Achievements &middot; Projects</span>
+    <span class="clock-utc">--:--:-- WARSAW</span>
+  </div>
 
-  <div class="wrap">
-    <header class="masthead">
-      <div class="mast-util">
-        <a class="back-home" href="../../index.html">← Back to home</a>
-        <span class="clock-utc">--:--:-- WARSAW</span>
-        <span>Ver. 3.0 / Minecraft</span>
+  <header class="site-header">
+    <div class="navbar">
+      <a class="nav-brand brand" href="../../index.html">
+        <i class="nav-mark" aria-hidden="true"></i>
+        <span id="brandName">Community Data</span>
+      </a>
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <ul>
+          <li><a href="../../index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="../../pages/achievements/" data-i18n="nav.achievements">Achievements</a></li>
+          <li><a href="../../pages/users/" data-i18n="nav.users">Users</a></li>
+          <li><a href="../../pages/other/" aria-current="page" data-i18n="nav.other">Other</a></li>
+        </ul>
+      </nav>
+      <div class="nav-side">
+        <a class="nav-cta" href="#" data-discord target="_blank" rel="noopener" data-i18n="nav.discord">Discord</a>
+        <button class="burger" id="burger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <div class="mast-brand">
-        <span class="mast-word">Community Data</span>
-        <span class="mast-sub">The Minecraft bulletin</span>
-      </div>
-    </header>
-    <main>
-      <section class="hero">
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="mc-hero">
+      <div class="container">
+        <a class="back-link" href="../../pages/other/">&larr; Projects</a>
+        <p class="section-label" style="margin-top:1.5rem">CD / 004 &mdash; Project 01</p>
+        <div class="mc-head">
+          <h1>Minecraft Server</h1>
+          <p class="mc-sub">Our community world &mdash; survival, autumn vibes, and a map you can browse live.</p>
+        </div>
+
         <div class="server-card">
-          <div class="server-icon">
+          <div class="server-icon" aria-hidden="true">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grass block">
-              <rect x="8" y="32" width="48" height="24" fill="#79553a"/>
-              <rect x="8" y="32" width="48" height="6" fill="#8a6244"/>
-              <rect x="8" y="8" width="48" height="24" fill="#79b544"/>
-              <rect x="8" y="8" width="48" height="7" fill="#9bd06a"/>
-              <rect x="14" y="38" width="6" height="6" fill="#6a4a30"/>
-              <rect x="30" y="44" width="6" height="6" fill="#6a4a30"/>
-              <rect x="46" y="38" width="6" height="6" fill="#6a4a30"/>
-              <rect x="20" y="14" width="6" height="6" fill="#6fae3e"/>
-              <rect x="38" y="20" width="6" height="6" fill="#6fae3e"/>
+              <rect x="8" y="32" width="48" height="24" fill="#5c4634"/>
+              <rect x="8" y="32" width="48" height="6" fill="#6b5340"/>
+              <rect x="8" y="8" width="48" height="24" fill="#5f7a4d"/>
+              <rect x="8" y="8" width="48" height="7" fill="#728d5e"/>
+              <rect x="14" y="38" width="6" height="6" fill="#4c3928"/>
+              <rect x="30" y="44" width="6" height="6" fill="#4c3928"/>
+              <rect x="46" y="38" width="6" height="6" fill="#4c3928"/>
+              <rect x="20" y="14" width="6" height="6" fill="#55703f"/>
+              <rect x="38" y="20" width="6" height="6" fill="#55703f"/>
             </svg>
           </div>
           <div class="server-body">
             <div class="server-top">
-              <h1>Minecraft Server</h1>
-              <span class="status" id="srvStatus"><i class="dot"></i><span id="srvStatusText">Connecting…</span></span>
+              <h2>Minecraft Server</h2>
+              <span class="status" id="srvStatus"><i class="dot"></i><span id="srvStatusText">Connecting&hellip;</span></span>
             </div>
-            <p class="motd" id="srvMotd">Our community Minecraft server — Survival, autumn vibes.</p>
+            <p class="motd" id="srvMotd">Our community Minecraft server &mdash; Survival, autumn vibes.</p>
           </div>
           <div class="server-side">
-            <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="players" id="srvPlayers"><b>—</b>/—</div>
+            <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="players" id="srvPlayers"><b>&mdash;</b>/&mdash;</div>
             <span class="version" id="srvVersion">1.21.11</span>
           </div>
         </div>
-      </section>
 
-      <section class="strip reveal">
-        <div><span>Version</span><b>1.21.11</b></div>
-        <div><span>Mode</span><b>Survival</b></div>
-      </section>
-
-      <section class="section reveal area-join">
-        <div class="section-head">
-          <h2>Browse the Map</h2>
-          <p>See our world live online.</p>
+        <div class="mc-strip">
+          <div><span>Version</span><b>1.21.11</b></div>
+          <div><span>Mode</span><b>Survival</b></div>
+          <div><span>Host</span><b>pancerni.hsrv.pl</b></div>
         </div>
-        <a class="map-card" href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">
-          <span class="map-pin" aria-hidden="true"></span>
-          <span class="map-label">Open map →</span>
-        </a>
-        <p class="join-note">To join the server — join <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">our Discord</a>.</p>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="copy">© 2026 Community Data · Minecraft Server</div>
-      <div class="footer-links">
-        <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">Discord</a>
-        <a href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">Map</a>
-        <a href="../rules/">Rules</a>
       </div>
-    </footer>
-  </div>
+    </section>
 
-  <script>
-    (function () {
-      var els = document.querySelectorAll('.reveal');
-      if (!('IntersectionObserver' in window)) {
-        els.forEach(function (e) { e.classList.add('in'); });
-        return;
-      }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-        });
-      }, { threshold: 0.12 });
-      els.forEach(function (e) { io.observe(e); });
-    })();
-  </script>
+    <section class="section container">
+      <div class="section-head">
+        <div class="section-heading">
+          <p class="section-label">01 / Map</p>
+          <h2 class="section-title">Browse the map</h2>
+        </div>
+        <a class="link-more" href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">Open live map</a>
+      </div>
 
+      <a class="map-card" href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">
+        <span class="map-meta">Live / Online map</span>
+        <span class="map-pin" aria-hidden="true"></span>
+        <span class="map-label">pancerni.hsrv.pl:10009</span>
+      </a>
+      <p class="join-note">To join the server &mdash; join <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">our Discord</a>. Server rules are listed under <a href="../rules/">Discord Rules</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span class="footer-name" id="footerBrand">Community Data</span>
+          <span class="footer-note" data-i18n="footer.note">A curated community archive</span>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="../../index.html" data-i18n="nav.home">Home</a>
+          <a href="../../pages/achievements/" data-i18n="nav.achievements">Achievements</a>
+          <a href="../../pages/users/" data-i18n="nav.users">Users</a>
+          <a href="../../pages/other/" data-i18n="nav.other">Other</a>
+        </nav>
+        <div class="footer-meta">
+          <a href="https://discord.gg/5QGseRgw2w" target="_blank" rel="noopener">Discord</a>
+          <a href="http://pancerni.hsrv.pl:10009/" target="_blank" rel="noopener">Live map</a>
+          <span>&copy; <span id="year">2026</span> &middot; <span data-i18n="footer.rights">All rights reserved.</span></span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>CD / 004 / MC</span>
+        <span>Community Data &mdash; Minecraft Server</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><h4></h4><p></p></div>
+
+  <script>window.CH_BASE = "../../";</script>
+  <script src="../../assets/js/main.js"></script>
   <script>
     (function () {
       var status = document.getElementById('srvStatus');
@@ -112,17 +148,20 @@
       var players = document.getElementById('srvPlayers');
       var version = document.getElementById('srvVersion');
       var motd = document.getElementById('srvMotd');
+      if (!status || !statusText || !players || !version) return;
+
       function setOffline(label) {
         status.className = 'status off';
         statusText.textContent = label || 'Offline';
         players.textContent = '';
         var dash = document.createElement('b');
-        dash.textContent = '—';
+        dash.textContent = '\u2014';
         players.appendChild(dash);
-        players.appendChild(document.createTextNode('/—'));
-        version.textContent = '—';
+        players.appendChild(document.createTextNode('/\u2014'));
+        version.textContent = '\u2014';
         if (motd) motd.textContent = 'The server is currently offline.';
       }
+
       function refresh() {
         fetch('https://api.mcsrvstat.us/3/pancerni.hsrv.pl')
           .then(function (r) {
@@ -133,8 +172,8 @@
             if (d && d.online) {
               status.className = 'status';
               statusText.textContent = 'Online';
-              var on = (d.players && typeof d.players.online === 'number') ? d.players.online : '—';
-              var max = (d.players && typeof d.players.max === 'number') ? d.players.max : '—';
+              var on = (d.players && typeof d.players.online === 'number') ? d.players.online : '\u2014';
+              var max = (d.players && typeof d.players.max === 'number') ? d.players.max : '\u2014';
               players.textContent = '';
               var bold = document.createElement('b');
               bold.textContent = String(on);
@@ -148,27 +187,9 @@
           })
           .catch(function () { setOffline('No data'); });
       }
+
       refresh();
       setInterval(refresh, 30000);
-    })();
-  </script>
-
-  <script>
-    // live Warsaw clock (same as the main site)
-    (function () {
-      var nodes = document.querySelectorAll('.clock-utc');
-      if (!nodes.length) return;
-      var fmt;
-      try {
-        fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Warsaw', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
-      } catch (e) { fmt = null; }
-      function tickClock() {
-        var d = new Date();
-        var s = fmt ? fmt.format(d).replace(/^24:/, '00:') + ' WARSAW' : d.toLocaleTimeString('en-GB', { hour12: false }) + ' LOCAL';
-        for (var i = 0; i < nodes.length; i++) nodes[i].textContent = s;
-      }
-      tickClock();
-      setInterval(tickClock, 1000);
     })();
   </script>
 </body>
