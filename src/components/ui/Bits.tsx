@@ -23,7 +23,7 @@ export function Avatar({
         src={url}
         alt=""
         loading="lazy"
-        className={`${dimensions} shrink-0 rounded-full border border-line object-cover`}
+        className={`${dimensions} shrink-0 rounded-full border border-line object-cover transition-[border-color,transform] duration-200`}
       />
     )
   }
@@ -31,7 +31,7 @@ export function Avatar({
   return (
     <span
       aria-hidden="true"
-      className={`${dimensions} flex shrink-0 items-center justify-center rounded-full border border-line bg-surface-3 font-medium text-ink-2`}
+      className={`${dimensions} flex shrink-0 items-center justify-center rounded-full border border-line bg-surface-3 font-medium text-ink-2 transition-colors duration-200`}
     >
       {initials(name) || '?'}
     </span>
@@ -78,11 +78,16 @@ export function Alert({
 
 export function Spinner({ label }: { label?: string }) {
   return (
-    <div className="flex items-center gap-2 text-xs text-ink-4">
+    <div className="flex items-center gap-2 text-xs text-ink-4" role="status">
       <span className="size-3.5 animate-spin rounded-full border-2 border-line-strong border-t-transparent" />
       {label ?? 'Loading…'}
     </div>
   )
+}
+
+/** Neutral placeholder block: keeps layout stable while data arrives. */
+export function Skeleton({ className = '' }: { className?: string }) {
+  return <div aria-hidden="true" className={`skeleton ${className}`} />
 }
 
 export function Pagination({

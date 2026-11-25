@@ -102,7 +102,10 @@ export function AdminUsersPage() {
                 const isBusy = busyId === row.id
 
                 return (
-                  <tr key={row.id} className="border-b border-line last:border-0">
+                  <tr
+                    key={row.id}
+                    className="border-b border-line transition-colors duration-150 last:border-0 hover:bg-surface-2/60"
+                  >
                     <td className="px-4 py-3">
                       <p className="text-ink">{row.display_name}</p>
                       <p className="text-xs text-ink-4">@{row.username}</p>

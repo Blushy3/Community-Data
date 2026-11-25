@@ -15,6 +15,7 @@ const primaryNav = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const { status, profile, isAdmin } = useAuth()
 
@@ -22,13 +23,34 @@ export function Header() {
     setIsMenuOpen(false)
   }, [location.pathname])
 
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 6)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const isSignedIn = status === 'signed-in' && profile !== null
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur-sm">
+    <header
+      className={`sticky top-0 z-40 border-b bg-canvas/90 backdrop-blur-sm duration-300 transition-[border-color,box-shadow] ${
+        isScrolled ? 'border-line shadow-[0_10px_28px_rgba(0,0,0,0.28)]' : 'border-transparent'
+      }`}
+    >
       <div className="page-container flex h-14 items-center gap-5">
-        <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="Community Data">
-          <img src={logoUrl} alt="" width={28} height={28} className="size-7 rounded-md" />
+        <Link
+          to="/"
+          className="group flex shrink-0 items-center gap-2"
+          aria-label="Community Data"
+        >
+          <img
+            src={logoUrl}
+            alt=""
+            width={28}
+            height={28}
+            className="size-7 rounded-md transition-transform duration-300 group-hover:scale-[1.07]"
+          />
           <span className="text-sm font-semibold tracking-tight whitespace-nowrap text-ink">
             Community Data
           </span>
@@ -86,7 +108,7 @@ export function Header() {
       </div>
 
       {isMenuOpen ? (
-        <div id="mobile-navigation" className="border-t border-line bg-surface lg:hidden">
+        <div id="mobile-navigation" className="animate-fade border-t border-line bg-surface lg:hidden">
           <nav aria-label="Mobile" className="page-container flex flex-col gap-0.5 py-3">
             <NavLink to="/" end className="rounded-md px-3 py-2 text-sm text-ink-2">
               Home

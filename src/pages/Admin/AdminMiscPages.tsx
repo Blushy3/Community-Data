@@ -121,7 +121,10 @@ export function AdminAuditLogPage() {
           </thead>
           <tbody>
             {entries.map((entry) => (
-              <tr key={entry.id} className="border-b border-line last:border-0">
+              <tr
+                key={entry.id}
+                className="border-b border-line transition-colors duration-150 last:border-0 hover:bg-surface-2/60"
+              >
                 <td className="px-4 py-3 text-xs text-ink-3">
                   {formatDateTime(entry.created_at)}
                 </td>

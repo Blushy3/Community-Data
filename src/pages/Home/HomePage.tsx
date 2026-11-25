@@ -66,7 +66,7 @@ export function HomePage() {
   return (
     <div>
       <section className="border-b border-line">
-        <div className="page-container py-16 sm:py-20">
+        <div className="page-container stagger py-16 sm:py-20">
           <p className="section-eyebrow">Community portal</p>
           <h1 className="mt-3 max-w-2xl text-balance">
             Our community, its people and its history.
@@ -132,7 +132,7 @@ export function HomePage() {
           {updates.length === 0 ? (
             <p className="mt-4 text-sm text-ink-4">Nothing published yet.</p>
           ) : (
-            <ul className="mt-4 divide-y divide-line border-t border-line">
+            <ul className="stagger mt-4 divide-y divide-line border-t border-line">
               {updates.map((update) => (
                 <li key={update.id}>
                   <Link
@@ -168,7 +168,7 @@ export function HomePage() {
           {members.length === 0 ? (
             <p className="mt-4 text-sm text-ink-4">No members yet.</p>
           ) : (
-            <ul className="mt-4 grid gap-x-8 sm:grid-cols-2">
+            <ul className="stagger mt-4 grid gap-x-8 sm:grid-cols-2">
               {members.map((member) => (
                 <li key={member.id} className="border-t border-line py-3">
                   <Link
@@ -199,12 +199,12 @@ export function HomePage() {
         <div className="page-container py-12">
           <h2 className="text-sm font-medium text-ink-3">Explore</h2>
 
-          <ul className="mt-4 grid gap-x-8 sm:grid-cols-2">
+          <ul className="stagger mt-4 grid gap-x-8 sm:grid-cols-2">
             {exploreLinks.map((item) => (
               <li key={item.to} className="border-t border-line">
                 <Link
                   to={item.to}
-                  className="group flex items-baseline justify-between gap-4 py-4 transition-colors duration-150"
+                  className="link-arrow group flex items-baseline justify-between gap-4 py-4 transition-colors duration-150"
                 >
                   <span>
                     <span className="block text-sm font-medium text-ink group-hover:text-accent-strong">
@@ -212,7 +212,7 @@ export function HomePage() {
                     </span>
                     <span className="block text-sm text-ink-3">{item.text}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-ink-4">→</span>
+                  <span className="arrow shrink-0 text-xs text-ink-4">→</span>
                 </Link>
               </li>
             ))}

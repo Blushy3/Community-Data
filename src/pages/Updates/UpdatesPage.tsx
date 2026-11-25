@@ -53,12 +53,12 @@ export function UpdatesPage() {
             description="Updates are written and published by administrators. Drafts never appear on the public site."
           />
         ) : (
-          <ul className="space-y-3">
+          <ul className="stagger space-y-3">
             {updates.map((update) => (
               <li key={update.id}>
                 <Link
                   to={`/updates/${update.slug}`}
-                  className="surface-card block px-5 py-4 transition-colors duration-150 hover:border-line-strong hover:bg-surface-2"
+                  className="surface-card card-interactive block px-5 py-4 hover:border-line-strong hover:bg-surface-2"
                 >
                   <p className="text-sm font-medium text-ink">{update.title}</p>
                   <p className="mt-1 text-sm text-ink-3">{update.description}</p>

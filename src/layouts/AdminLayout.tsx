@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 
 import { Alert, Spinner } from '@/components/ui/Bits'
 import { useAuth } from '@/context/AuthContext'
@@ -41,7 +41,7 @@ function AdminShell({ children }: { children: ReactNode }) {
                   className={({ isActive }) =>
                     isActive
                       ? 'block rounded-md bg-surface-2 px-3 py-2 text-sm text-ink'
-                      : 'block rounded-md px-3 py-2 text-sm text-ink-3 hover:bg-surface-2 hover:text-ink'
+                      : 'block rounded-md px-3 py-2 text-sm text-ink-3 transition-colors duration-150 hover:bg-surface-2 hover:text-ink'
                   }
                 >
                   {item.label}
@@ -63,6 +63,7 @@ function AdminShell({ children }: { children: ReactNode }) {
  */
 export function AdminLayout() {
   const { status, profile, isAdmin } = useAuth()
+  const location = useLocation()
 
   if (status === 'loading') {
     return (
@@ -94,7 +95,9 @@ export function AdminLayout() {
 
   return (
     <AdminShell>
-      <Outlet />
+      <div key={location.pathname} className="animate-fade">
+        <Outlet />
+      </div>
     </AdminShell>
   )
 }

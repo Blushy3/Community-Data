@@ -98,18 +98,11 @@ export function ProfilePage() {
     <div>
       <div className="border-b border-line">
         <div className="page-container py-6">
-          <div
-            className="h-32 rounded-lg border border-line bg-surface-2 sm:h-44"
-            style={
-              bannerUrl
-                ? {
-                    backgroundImage: `url(${bannerUrl})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }
-                : undefined
-            }
-          />
+          <div className="relative h-32 overflow-hidden rounded-lg border border-line bg-surface-2 sm:h-44">
+            {bannerUrl ? (
+              <img src={bannerUrl} alt="" className="size-full animate-fade object-cover" />
+            ) : null}
+          </div>
           <div className="relative -mt-10 flex flex-wrap items-end gap-4 px-1">
             <Avatar path={profile.avatar_path} name={profile.display_name} size="lg" />
             <div className="min-w-0 pb-1">
@@ -143,7 +136,10 @@ export function ProfilePage() {
             ) : (
               <ul className="mt-2 flex flex-wrap gap-2">
                 {awards.map((award) => (
-                  <li key={award.achievement_id} className="badge">
+                  <li
+                    key={award.achievement_id}
+                    className="badge transition-colors duration-150 hover:border-line-strong hover:text-ink"
+                  >
                     {award.achievements?.name ?? 'Achievement'}
                   </li>
                 ))}

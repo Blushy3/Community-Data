@@ -50,12 +50,12 @@ export function ExplorePage() {
             description="Administrators can create, order, publish and unpublish thematic sections."
           />
         ) : (
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {sections.map((section) => (
               <li key={section.id}>
                 <Link
                   to={`/explore/${section.slug}`}
-                  className="surface-card flex h-full flex-col gap-1.5 px-4 py-4 transition-colors duration-150 hover:border-line-strong hover:bg-surface-2"
+                  className="surface-card card-interactive flex h-full flex-col gap-1.5 px-4 py-4 hover:border-line-strong hover:bg-surface-2"
                 >
                   <span className="text-sm font-medium text-ink">{section.title}</span>
                   <span className="text-sm text-ink-3">{section.description}</span>

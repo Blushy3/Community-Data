@@ -62,7 +62,7 @@ export function Footer() {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="text-sm text-ink-3 transition-colors duration-150 hover:text-ink"
+                    className="inline-block text-sm text-ink-3 duration-150 transition-[color,transform] hover:translate-x-0.5 hover:text-ink"
                   >
                     {link.label}
                   </Link>

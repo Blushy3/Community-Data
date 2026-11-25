@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Alert, Avatar, Pagination, Spinner } from '@/components/ui/Bits'
+import { Alert, Avatar, Pagination } from '@/components/ui/Bits'
 import { EmptyState, PageHeader } from '@/components/ui/PageHeader'
 import { describeError, profilesApi } from '@/lib/api'
 import type { MemberRow } from '@/lib/api'
@@ -105,9 +105,18 @@ export function MembersPage() {
         ) : null}
 
         {isLoading ? (
-          <div className="mt-6">
-            <Spinner label="Loading members…" />
-          </div>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <li key={index} className="surface-card flex items-start gap-3 px-4 py-4">
+                <div className="skeleton size-12 rounded-full" />
+                <div className="flex-1 space-y-2 py-0.5">
+                  <div className="skeleton h-3 w-2/3" />
+                  <div className="skeleton h-3 w-1/3" />
+                  <div className="skeleton h-3 w-1/2" />
+                </div>
+              </li>
+            ))}
+          </ul>
         ) : rows.length === 0 ? (
           <div className="mt-6">
             <EmptyState
@@ -120,12 +129,12 @@ export function MembersPage() {
             />
           </div>
         ) : (
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="stagger mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {rows.map((member) => (
               <li key={member.id}>
                 <Link
                   to={`/members/${member.username}`}
-                  className="surface-card flex h-full items-start gap-3 px-4 py-4 transition-colors duration-150 hover:border-line-strong hover:bg-surface-2"
+                  className="surface-card card-interactive flex h-full items-start gap-3 px-4 py-4 hover:border-line-strong hover:bg-surface-2"
                 >
                   <Avatar path={member.avatar_path} name={member.display_name} />
                   <span className="min-w-0">

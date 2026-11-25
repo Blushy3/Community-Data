@@ -16,12 +16,16 @@ function ScrollToTop() {
 
 /** Shared shell for every public page (README §4). */
 export function PublicLayout() {
+  const location = useLocation()
+
   return (
     <div className="flex min-h-dvh flex-col">
       <ScrollToTop />
       <Header />
       <main id="main-content" className="flex-1">
-        <Outlet />
+        <div key={location.pathname} className="animate-fade">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </div>

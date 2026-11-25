@@ -50,7 +50,7 @@ export function AchievementsPage() {
             description="Administrators define achievements (name, identifier, description) and assign them to members."
           />
         ) : (
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {achievements.map((achievement) => (
               <li key={achievement.id} className="surface-card px-4 py-4">
                 <p className="text-sm font-medium text-ink">{achievement.name}</p>
