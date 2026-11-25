@@ -52,8 +52,8 @@ export function AdminRegistrationPage() {
       <div>
         <h1 className="text-2xl">Registration</h1>
         <p className="mt-1 text-sm text-ink-3">
-          Only a SHA-256 hash of the invitation code is stored - the code itself can never be read
-          back.
+          Codes are stored only in a protected form. The original value can never be read
+          back, not even by an administrator.
         </p>
       </div>
 
