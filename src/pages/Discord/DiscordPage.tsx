@@ -47,8 +47,8 @@ export function DiscordPage() {
       <div className="page-container py-8">
         <div className="surface-card max-w-2xl px-5 py-6">
           <p className="text-sm text-ink-2">
-            This portal documents the community. Everything live — chat, events, voice and
-            announcements in the moment — happens on our Discord server.
+            This portal documents the community. Everything live - chat, events, voice and
+            announcements in the moment - happens on our Discord server.
           </p>
 
           {error ? (

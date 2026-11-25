@@ -10,7 +10,6 @@ const adminNav = [
   { to: '/admin/registration', label: 'Registration' },
   { to: '/admin/achievements', label: 'Achievements' },
   { to: '/admin/updates', label: 'Updates' },
-  { to: '/admin/community', label: 'Community' },
   { to: '/admin/explore', label: 'Explore' },
   { to: '/admin/storage', label: 'Storage' },
   { to: '/admin/audit-log', label: 'Audit log' },
@@ -59,7 +58,7 @@ function AdminShell({ children }: { children: ReactNode }) {
 }
 
 /**
- * Admin layout (README §8). The guard here is UX only — every operation is
+ * Admin layout (README §8). The guard here is UX only - every operation is
  * re-authorized by database functions, so bypassing the UI gains nothing.
  */
 export function AdminLayout() {

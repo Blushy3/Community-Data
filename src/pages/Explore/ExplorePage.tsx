@@ -36,7 +36,7 @@ export function ExplorePage() {
       <PageHeader
         eyebrow="Sections"
         title="Explore"
-        description="Thematic areas of the community — games, projects and the archive."
+        description="Thematic areas of the community - games, projects and the archive."
       />
 
       <div className="page-container py-8">

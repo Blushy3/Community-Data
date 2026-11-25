@@ -5,7 +5,6 @@ import { PublicLayout } from '@/layouts/PublicLayout'
 
 import { AchievementsPage } from '@/pages/Achievements/AchievementsPage'
 import { AdminAchievementsPage } from '@/pages/Admin/AdminAchievementsPage'
-import { AdminCommunityPage } from '@/pages/Admin/AdminCommunityPage'
 import { AdminDashboardPage } from '@/pages/Admin/AdminDashboardPage'
 import { AdminExplorePage } from '@/pages/Admin/AdminExplorePage'
 import { AdminAuditLogPage, AdminStoragePage } from '@/pages/Admin/AdminMiscPages'
@@ -15,7 +14,6 @@ import { AdminUsersPage } from '@/pages/Admin/AdminUsersPage'
 import { LoginPage } from '@/pages/Auth/LoginPage'
 import { RecoverPasswordPage } from '@/pages/Auth/RecoverPasswordPage'
 import { RegisterPage } from '@/pages/Auth/RegisterPage'
-import { CommunityPage } from '@/pages/Community/CommunityPage'
 import { DiscordPage } from '@/pages/Discord/DiscordPage'
 import { AccessDeniedPage, NotFoundPage } from '@/pages/Errors/ErrorPages'
 import { ExplorePage } from '@/pages/Explore/ExplorePage'
@@ -42,7 +40,6 @@ export const router = createBrowserRouter(
         { path: 'members', element: <MembersPage /> },
         { path: 'members/:username', element: <ProfilePage /> },
         { path: 'achievements', element: <AchievementsPage /> },
-        { path: 'community', element: <CommunityPage /> },
         { path: 'explore', element: <ExplorePage /> },
         { path: 'explore/:slug', element: <ExploreSectionPage /> },
         { path: 'updates', element: <UpdatesPage /> },
@@ -66,7 +63,6 @@ export const router = createBrowserRouter(
         { path: 'registration', element: <AdminRegistrationPage /> },
         { path: 'achievements', element: <AdminAchievementsPage /> },
         { path: 'updates', element: <AdminUpdatesPage /> },
-        { path: 'community', element: <AdminCommunityPage /> },
         { path: 'explore', element: <AdminExplorePage /> },
         { path: 'storage', element: <AdminStoragePage /> },
         { path: 'audit-log', element: <AdminAuditLogPage /> },

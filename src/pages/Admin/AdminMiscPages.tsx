@@ -37,7 +37,7 @@ export function AdminStoragePage() {
       <div>
         <h1 className="text-2xl">Storage</h1>
         <p className="mt-1 text-sm text-ink-3">
-          Profile images only — one avatar and one banner per member, replaced files are deleted.
+          Profile images only - one avatar and one banner per member, replaced files are deleted.
         </p>
       </div>
 
@@ -127,7 +127,7 @@ export function AdminAuditLogPage() {
                 </td>
                 <td className="px-4 py-3 font-mono text-xs text-ink-2">{entry.action}</td>
                 <td className="px-4 py-3 font-mono text-[11px] text-ink-4">
-                  {entry.target_user_id?.slice(0, 8) ?? '—'}
+                  {entry.target_user_id?.slice(0, 8) ?? '-'}
                 </td>
                 <td className="px-4 py-3 text-[11px] text-ink-4">
                   {JSON.stringify(entry.details)}

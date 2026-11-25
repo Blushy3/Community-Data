@@ -52,7 +52,7 @@ export function AdminRegistrationPage() {
       <div>
         <h1 className="text-2xl">Registration</h1>
         <p className="mt-1 text-sm text-ink-3">
-          Only a SHA-256 hash of the invitation code is stored — the code itself can never be read
+          Only a SHA-256 hash of the invitation code is stored - the code itself can never be read
           back.
         </p>
       </div>
@@ -155,7 +155,7 @@ export function AdminRegistrationPage() {
       <section className="surface-card px-5 py-5">
         <p className="text-sm font-medium text-ink">Roles</p>
         <p className="mt-1 text-xs text-ink-3">
-          member — own profile only. moderator — reserved for explicitly defined duties. admin —
+          member - own profile only. moderator - reserved for explicitly defined duties. admin -
           full management. Every backend function re-checks the role in the database.
         </p>
       </section>

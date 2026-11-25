@@ -49,7 +49,7 @@ export function HomePage() {
           </h1>
           <p className="mt-4 max-w-2xl text-base text-ink-2">
             Community Data documents who we are: member profiles, achievements, official updates
-            and thematic sections. Discord stays the place where we talk — this is where we keep
+            and thematic sections. Discord stays the place where we talk - this is where we keep
             what matters.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
@@ -85,7 +85,7 @@ export function HomePage() {
               <div key={item.label} className="surface-card px-4 py-4">
                 <dt className="text-xs text-ink-4">{item.label}</dt>
                 <dd className="mt-1 text-2xl font-semibold tabular-nums text-ink">
-                  {isLoading ? '—' : item.value}
+                  {isLoading ? '-' : item.value}
                 </dd>
               </div>
             ))}
@@ -180,7 +180,6 @@ export function HomePage() {
                 text: 'Badges awarded by the administration.',
               },
               { to: '/updates', title: 'Updates', text: 'Official community announcements.' },
-              { to: '/community', title: 'Community', text: 'Who we are, rules and history.' },
               { to: '/explore', title: 'Explore', text: 'Thematic areas of the community.' },
               { to: '/discord', title: 'Discord', text: 'Live conversation and events.' },
             ].map((item) => (

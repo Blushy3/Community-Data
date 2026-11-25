@@ -1,5 +1,5 @@
 export function formatDate(value: string | null | undefined): string {
-  if (!value) return '—'
+  if (!value) return '-'
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -8,7 +8,7 @@ export function formatDate(value: string | null | undefined): string {
 }
 
 export function formatDateTime(value: string | null | undefined): string {
-  if (!value) return '—'
+  if (!value) return '-'
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'short',

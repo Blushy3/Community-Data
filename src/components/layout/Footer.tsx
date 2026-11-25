@@ -6,14 +6,13 @@ const footerNav = [
     links: [
       { to: '/members', label: 'Members' },
       { to: '/achievements', label: 'Achievements' },
-      { to: '/community', label: 'Community' },
+      { to: '/updates', label: 'Updates' },
     ],
   },
   {
     heading: 'Content',
     links: [
       { to: '/explore', label: 'Explore' },
-      { to: '/updates', label: 'Updates' },
       { to: '/discord', label: 'Discord' },
     ],
   },
@@ -34,7 +33,7 @@ export function Footer() {
         <div className="max-w-sm">
           <p className="text-sm font-semibold text-ink">Community Data</p>
           <p className="mt-2 text-sm text-ink-3">
-            The public portal of our community — members, achievements, news and
+            The public portal of our community - members, achievements, news and
             everything worth knowing. Conversations still happen on Discord.
           </p>
           <p className="mt-4 text-xs text-ink-4">

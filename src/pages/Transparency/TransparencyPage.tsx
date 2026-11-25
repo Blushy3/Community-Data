@@ -9,7 +9,7 @@ export function TransparencyPage() {
       <PageHeader
         eyebrow="Transparency"
         title="Built with AI. Guided by people."
-        description="How artificial intelligence is used in this project — stated openly."
+        description="How artificial intelligence is used in this project - stated openly."
       />
 
       <div className="page-container py-8">
@@ -29,7 +29,7 @@ export function TransparencyPage() {
             <h2 className="text-base">What AI is not responsible for</h2>
             <p className="mt-2 text-ink-3">
               Direction, requirements and final decisions are made by people. AI is a
-              tool used during development — not a member of the administration and not
+              tool used during development - not a member of the administration and not
               an author of community rules or moderation decisions.
             </p>
           </section>

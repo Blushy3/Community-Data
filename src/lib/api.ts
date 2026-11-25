@@ -25,8 +25,8 @@ const MESSAGES: Record<string, string> = {
   registration_not_configured: 'Registration is not configured yet.',
   invalid_invitation_code: 'That invitation code is not valid.',
   username_taken: 'This username is already taken.',
-  invalid_username: 'Username must be 3–20 characters: a–z, 0–9 and underscore.',
-  invalid_display_name: 'Display name must be 1–40 characters.',
+  invalid_username: 'Username must be 3-20 characters: a-z, 0-9 and underscore.',
+  invalid_display_name: 'Display name must be 1-40 characters.',
   invalid_password: 'Password must be at least 8 characters.',
   rate_limited: 'Too many attempts. Try again later.',
   invalid_credentials: 'Wrong username or password.',
@@ -156,7 +156,7 @@ export interface MemberRow {
 
 const MEMBER_COLUMNS = 'id, username, display_name, bio, avatar_path, created_at'
 
-/** PostgREST `or()` filters use `,` and `%` as syntax — strip them from input. */
+/** PostgREST `or()` filters use `,` and `%` as syntax - strip them from input. */
 function sanitizeSearch(value: string): string {
   return value
     .replace(/[%,()]/g, ' ')
@@ -376,7 +376,7 @@ export const contentApi = {
 }
 
 // ---------------------------------------------------------------------------
-// Administration — every call lands in a SECURITY DEFINER function that checks
+// Administration - every call lands in a SECURITY DEFINER function that checks
 // the admin role on the server (README §8).
 // ---------------------------------------------------------------------------
 export interface AdminUserRow {
@@ -406,7 +406,7 @@ export const adminApi = {
   async users(search: string, limit = 50) {
     let query = supabase
       .from('profiles')
-      .select('id, username, display_name, account_status, created_at, user_roles ( role )')
+      .select('id, username, display_name, account_status, created_at')
       .order('created_at', { ascending: false })
       .limit(limit)
 
@@ -417,7 +417,28 @@ export const adminApi = {
 
     const { data, error } = await query
     if (error) throw new ApiError(error.message)
-    return (data ?? []) as unknown as AdminUserRow[]
+
+    const profiles = (data ?? []) as Omit<AdminUserRow, 'user_roles'>[]
+    if (profiles.length === 0) return []
+
+    // profiles and user_roles both point at auth.users, so PostgREST cannot
+    // embed one in the other. Two queries, merged here.
+    const { data: roleRows, error: rolesError } = await supabase
+      .from('user_roles')
+      .select('user_id, role')
+      .in(
+        'user_id',
+        profiles.map((row) => row.id),
+      )
+
+    if (rolesError) throw new ApiError(rolesError.message)
+
+    const rolesByUser = new Map<string, { role: Role }[]>()
+    for (const row of (roleRows ?? []) as { user_id: string; role: Role }[]) {
+      rolesByUser.set(row.user_id, [...(rolesByUser.get(row.user_id) ?? []), { role: row.role }])
+    }
+
+    return profiles.map((row) => ({ ...row, user_roles: rolesByUser.get(row.id) ?? [] }))
   },
 
   setRole: (userId: string, role: Role) =>

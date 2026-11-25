@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Alert, Avatar, Spinner } from '@/components/ui/Bits'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -25,7 +25,8 @@ const SOCIAL_FIELDS = [
 ] as const
 
 export function SettingsPage() {
-  const { status, profile, refresh } = useAuth()
+  const navigate = useNavigate()
+  const { status, profile, refresh, signOut } = useAuth()
 
   const [displayName, setDisplayName] = useState('')
   const [bio, setBio] = useState('')
@@ -294,6 +295,22 @@ export function SettingsPage() {
             </Link>
           </div>
         </form>
+
+        <section className="surface-card flex flex-wrap items-center justify-between gap-3 px-5 py-5">
+          <div>
+            <p className="text-sm font-medium text-ink">Session</p>
+            <p className="text-xs text-ink-3">Signed in as @{profile.username}.</p>
+          </div>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => {
+              void signOut().then(() => navigate('/'))
+            }}
+          >
+            Sign out
+          </button>
+        </section>
       </div>
     </div>
   )

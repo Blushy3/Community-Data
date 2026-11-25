@@ -96,7 +96,7 @@ export function RegisterPage() {
                 {copied ? 'Copied' : 'Copy code'}
               </button>
               <button type="button" className="btn-primary" onClick={() => navigate('/login')}>
-                I saved it — sign in
+                I saved it - sign in
               </button>
             </div>
             <p className="mt-4 text-xs text-ink-4">
@@ -223,7 +223,7 @@ export function RegisterPage() {
                 required
               />
               <p className="mt-1.5 text-xs text-ink-4">
-                3–20 characters: a–z, 0–9, underscore. Used to sign in, cannot be changed.
+                3-20 characters: a-z, 0-9, underscore. Used to sign in, cannot be changed.
               </p>
             </div>
 
