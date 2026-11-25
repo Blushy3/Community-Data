@@ -1,50 +1,60 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const footerNav = [
-  {
-    heading: 'Community',
-    links: [
-      { to: '/members', label: 'Members' },
-      { to: '/achievements', label: 'Achievements' },
-      { to: '/updates', label: 'Updates' },
-    ],
-  },
-  {
-    heading: 'Content',
-    links: [
-      { to: '/explore', label: 'Explore' },
-      { to: '/discord', label: 'Discord' },
-    ],
-  },
-  {
-    heading: 'Project',
-    links: [
-      { to: '/transparency', label: 'AI transparency' },
-      { to: '/login', label: 'Sign in' },
-      { to: '/register', label: 'Create account' },
-    ],
-  },
-] as const
+import { useAuth } from '@/context/AuthContext'
+
+function buildGroups(signedIn: boolean, isAdmin: boolean) {
+  return [
+    {
+      heading: 'Community',
+      links: [
+        { to: '/members', label: 'Members' },
+        { to: '/achievements', label: 'Achievements' },
+        { to: '/updates', label: 'Updates' },
+      ],
+    },
+    {
+      heading: 'Content',
+      links: [
+        { to: '/explore', label: 'Explore' },
+        { to: '/discord', label: 'Discord' },
+        { to: '/transparency', label: 'AI transparency' },
+      ],
+    },
+    {
+      heading: 'Account',
+      links: signedIn
+        ? [
+            { to: '/settings', label: 'Account settings' },
+            ...(isAdmin ? [{ to: '/admin', label: 'Admin panel' }] : []),
+          ]
+        : [
+            { to: '/login', label: 'Sign in' },
+            { to: '/register', label: 'Create account' },
+          ],
+    },
+  ]
+}
 
 export function Footer() {
+  const { profile, isAdmin, signOut } = useAuth()
+  const navigate = useNavigate()
+  const groups = buildGroups(profile !== null, isAdmin)
+
   return (
     <footer className="mt-16 border-t border-line bg-surface/40">
       <div className="page-container grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div className="max-w-sm">
           <p className="text-sm font-semibold text-ink">Community Data</p>
           <p className="mt-2 text-sm text-ink-3">
-            The public portal of our community - members, achievements, news and
+            The public portal of our community: members, achievements, news and
             everything worth knowing. Conversations still happen on Discord.
           </p>
           <p className="mt-4 text-xs text-ink-4">
-            Built with AI. Guided by people.{' '}
-            <Link to="/transparency" className="text-ink-2 underline decoration-line-strong underline-offset-2 hover:text-ink">
-              Read more
-            </Link>
+            Built with AI. Guided by people.
           </p>
         </div>
 
-        {footerNav.map((group) => (
+        {groups.map((group) => (
           <nav key={group.heading} aria-label={group.heading}>
             <p className="section-eyebrow">{group.heading}</p>
             <ul className="mt-3 space-y-2">
@@ -58,6 +68,19 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              {group.heading === 'Account' && profile ? (
+                <li>
+                  <button
+                    type="button"
+                    className="text-sm text-ink-3 transition-colors duration-150 hover:text-ink"
+                    onClick={() => {
+                      void signOut().then(() => navigate('/'))
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </li>
+              ) : null}
             </ul>
           </nav>
         ))}

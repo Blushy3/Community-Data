@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Alert, Avatar } from '@/components/ui/Bits'
 import { EmptyState } from '@/components/ui/PageHeader'
+import { useAuth } from '@/context/AuthContext'
 import { contentApi, describeError, profilesApi } from '@/lib/api'
 import type { MemberRow } from '@/lib/api'
 import type { CommunityUpdate } from '@/types'
@@ -11,6 +12,7 @@ import { formatDate } from '@/utils/format'
 type UpdateTeaser = Pick<CommunityUpdate, 'id' | 'title' | 'slug' | 'description' | 'published_at'>
 
 export function HomePage() {
+  const { profile } = useAuth()
   const [stats, setStats] = useState({ members: 0, achievements: 0, updates: 0 })
   const [updates, setUpdates] = useState<UpdateTeaser[]>([])
   const [members, setMembers] = useState<MemberRow[]>([])
@@ -42,7 +44,7 @@ export function HomePage() {
   return (
     <div>
       <section className="border-b border-line">
-        <div className="page-container py-16 sm:py-24">
+        <div className="page-container py-14 sm:py-20">
           <p className="section-eyebrow">Community portal</p>
           <h1 className="mt-3 max-w-3xl text-balance">
             A public home for our community, its people and its history.
@@ -53,9 +55,15 @@ export function HomePage() {
             what matters.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
-            <Link to="/register" className="btn-primary">
-              Create your profile
-            </Link>
+            {profile ? (
+              <Link to={`/members/${profile.username}`} className="btn-primary">
+                Your profile
+              </Link>
+            ) : (
+              <Link to="/register" className="btn-primary">
+                Create your profile
+              </Link>
+            )}
             <Link to="/discord" className="btn-secondary">
               Join the Discord
             </Link>
@@ -166,35 +174,6 @@ export function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="shortcuts-heading">
-        <div className="page-container py-10">
-          <h2 id="shortcuts-heading" className="text-sm font-medium text-ink-3">
-            Explore the portal
-          </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { to: '/members', title: 'Members', text: 'The public directory of members.' },
-              {
-                to: '/achievements',
-                title: 'Achievements',
-                text: 'Badges awarded by the administration.',
-              },
-              { to: '/updates', title: 'Updates', text: 'Official community announcements.' },
-              { to: '/explore', title: 'Explore', text: 'Thematic areas of the community.' },
-              { to: '/discord', title: 'Discord', text: 'Live conversation and events.' },
-            ].map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="surface-card flex flex-col gap-1.5 px-4 py-4 transition-colors duration-150 hover:border-line-strong hover:bg-surface-2"
-              >
-                <span className="text-sm font-medium text-ink">{item.title}</span>
-                <span className="text-sm text-ink-3">{item.text}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
