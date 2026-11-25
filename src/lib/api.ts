@@ -149,12 +149,12 @@ export interface MemberRow {
   id: string
   username: string
   display_name: string
-  bio: string | null
   avatar_path: string | null
   created_at: string
 }
 
-const MEMBER_COLUMNS = 'id, username, display_name, bio, avatar_path, created_at'
+// `bio` is intentionally not selected: the directory does not render it.
+const MEMBER_COLUMNS = 'id, username, display_name, avatar_path, created_at'
 
 /** PostgREST `or()` filters use `,` and `%` as syntax - strip them from input. */
 function sanitizeSearch(value: string): string {

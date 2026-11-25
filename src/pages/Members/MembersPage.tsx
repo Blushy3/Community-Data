@@ -136,9 +136,6 @@ export function MembersPage() {
                     <span className="mt-1 block text-xs text-ink-4">
                       Joined {formatDate(member.created_at)}
                     </span>
-                    {member.bio ? (
-                      <span className="mt-2 line-clamp-2 block text-xs text-ink-3">{member.bio}</span>
-                    ) : null}
                   </span>
                 </Link>
               </li>
