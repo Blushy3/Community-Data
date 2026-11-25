@@ -2,7 +2,6 @@ import { supabase } from '@/lib/supabase/client'
 import type {
   Achievement,
   AccountStatus,
-  CommunityInfoEntry,
   CommunityUpdate,
   ExploreSection,
   Profile,
@@ -23,6 +22,11 @@ export class ApiError extends Error {
 const MESSAGES: Record<string, string> = {
   registration_disabled: 'Registration is currently closed.',
   registration_not_configured: 'Registration is not configured yet.',
+  registration_failed: 'The account could not be created. Check your details and try again.',
+  settings_unavailable: 'Registration is temporarily unavailable. Please try again later.',
+  bad_request: 'The request could not be read. Please try again.',
+  unknown_action: 'Something went wrong. Please try again.',
+  password_too_weak: 'That password is too weak. Use at least 8 characters.',
   invalid_invitation_code: 'That invitation code is not valid.',
   username_taken: 'This username is already taken.',
   invalid_username: 'Username must be 3-20 characters: a-z, 0-9 and underscore.',
@@ -78,8 +82,14 @@ async function callAuth(payload: Record<string, unknown>): Promise<AuthEnvelope>
     const response = (error as { context?: { json?: () => Promise<unknown> } }).context
     if (response?.json) {
       try {
-        const body = (await response.json()) as { error?: string }
-        if (body?.error) code = body.error
+        const body = (await response.json()) as { error?: string; detail?: string }
+        if (body?.error) {
+          code = body.error
+          // Surface the real reason instead of a generic message.
+          if (code === 'registration_failed' && /password/i.test(body.detail ?? '')) {
+            code = 'password_too_weak'
+          }
+        }
       } catch {
         /* ignore malformed error bodies */
       }
@@ -331,16 +341,6 @@ export const contentApi = {
     )
   },
 
-  async communityInfo() {
-    const { data, error } = await supabase
-      .from('community_info')
-      .select('*')
-      .order('sort_order', { ascending: true })
-
-    if (error) throw new ApiError(error.message)
-    return (data ?? []) as CommunityInfoEntry[]
-  },
-
   async exploreSections() {
     const { data, error } = await supabase
       .from('explore_sections')
@@ -512,32 +512,6 @@ export const adminApi = {
     }),
 
   deleteUpdate: (id: string) => rpc<void>('admin_delete_update', { p_id: id }),
-
-  async allCommunityInfo() {
-    const { data, error } = await supabase
-      .from('community_info')
-      .select('*')
-      .order('sort_order', { ascending: true })
-
-    if (error) throw new ApiError(error.message)
-    return (data ?? []) as CommunityInfoEntry[]
-  },
-
-  saveCommunityInfo: (input: {
-    key: string
-    title: string
-    content: string
-    sortOrder: number
-  }) =>
-    rpc<void>('admin_save_community_info', {
-      p_key: input.key,
-      p_title: input.title,
-      p_content: input.content,
-      p_sort_order: input.sortOrder,
-    }),
-
-  deleteCommunityInfo: (key: string) =>
-    rpc<void>('admin_delete_community_info', { p_key: key }),
 
   async allExploreSections() {
     const { data, error } = await supabase

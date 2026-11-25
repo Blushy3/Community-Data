@@ -55,16 +55,6 @@ export interface CommunityUpdate {
   updated_at: string
 }
 
-export interface CommunityInfoEntry {
-  id: string
-  key: string
-  title: string
-  content: string
-  sort_order: number
-  updated_at: string
-  updated_by: string | null
-}
-
 export interface ExploreSection {
   id: string
   slug: string

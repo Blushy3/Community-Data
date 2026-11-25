@@ -241,7 +241,9 @@ export function RegisterPage() {
                 onChange={(event) => setPassword(event.target.value)}
                 required
               />
-              <p className="mt-1.5 text-xs text-ink-4">At least 8 characters.</p>
+              <p className="mt-1.5 text-xs text-ink-4">
+                At least 8 characters. A longer passphrase is safer.
+              </p>
             </div>
 
             <div>
